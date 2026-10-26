@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Servo Control</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>12-Servo Control</h1>
+    <div id="layout">
+      <section id="sim-col">
+        <h2>Digital twin <span class="hint">drag to orbit, scroll to zoom — mirrors the commanded angles</span></h2>
+        <div id="sim3d"></div>
+        <details id="map-panel" open>
+          <summary>Channel mapping <span class="hint">sim angle = sign × (servo − 90) + offset · saved on the board</span></summary>
+          <p class="hint">
+            Jog a channel: the leg that moves in the sim flashes. If it's the wrong leg or the wrong
+            direction compared to the real robot, fix it here.
+          </p>
+          <table id="map-table">
+            <thead><tr><th>channel</th><th>sim joint</th><th>sign</th><th>offset °</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="map-buttons">
+            <button id="map-reverse">Reverse leg order</button>
+            <button id="map-flip-hips">Flip all hip directions</button>
+            <button id="map-flip-knees">Flip all knee directions</button>
+            <button id="map-reset">Reset to default</button>
+          </div>
+        </details>
+      </section>
+
+      <section id="ctrl-col">
+        <div id="anim-panel">
+          <h2>Animations</h2>
+          <div class="row anim-buttons">
+            <button id="anim-walk">&#9654; Walk forward</button>
+            <button id="anim-stop">&#9632; Stop</button>
+          </div>
+          <div class="row anim-buttons">
+            <button id="anim-stand">Stand</button>
+            <button id="anim-sit">Sit (all 90)</button>
+          </div>
+          <div class="row">
+            <label><input type="checkbox" id="anim-send"> Send to robot</label>
+            <label>speed
+              <select id="anim-speed">
+                <option value="0.5">0.5&times;</option>
+                <option value="1" selected>1&times;</option>
+                <option value="1.5">1.5&times;</option>
+              </select>
+            </label>
+          </div>
+          <div class="row" title="Left/right stride difference, live while walking. + turns right. Double-click to reset. -0.15 walked straight in the physics sim.">
+            <label for="anim-steer">steer</label>
+            <input type="range" id="anim-steer" min="-0.6" max="0.6" step="0.01" value="0">
+            <output id="anim-steer-val">0.00</output>
+          </div>
+          <p class="hint" id="anim-status">Off = preview in the twin only. Try it in the air before on the ground.</p>
+        </div>
+        <hr>
+        <div id="jog-panel">
+          <h2>Manual Jog</h2>
+          <div class="row">
+            <label for="jog-channel">Channel</label>
+            <select id="jog-channel"></select>
+            <output id="jog-angle">90</output>
+          </div>
+          <div class="row jog-buttons">
+            <button data-delta="-10">-10</button>
+            <button data-delta="-1">-1</button>
+            <button id="jog-center">Center 90</button>
+            <button data-delta="1">+1</button>
+            <button data-delta="10">+10</button>
+          </div>
+        </div>
+        <hr>
+        <div class="row" id="all-row">
+          <label for="all">All</label>
+          <input type="range" id="all" min="0" max="180" value="90">
+          <output for="all">90</output>
+        </div>
+        <hr>
+        <div id="rows"></div>
+      </section>
+    </div>
+    <script type="module" src="sim3d.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="gait.js"></script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+body {
+  font-family: sans-serif;
+  background: #f4f5f7;
+  color: #1d1f24;
+  max-width: 1250px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+h1 {
+  font-size: 1.2rem;
+}
+h2 {
+  font-size: 1rem;
+  margin: 0 0 0.4rem;
+}
+.hint {
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: #777;
+}
+#layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  #layout {
+    grid-template-columns: 1fr;
+  }
+}
+#sim3d {
+  width: 100%;
+  height: 460px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #15171c;
+}
+#map-panel {
+  margin-top: 0.8rem;
+}
+#map-panel summary {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+#map-table {
+  border-collapse: collapse;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+}
+#map-table th,
+#map-table td {
+  padding: 0.15rem 0.5rem;
+  text-align: left;
+}
+#map-table input {
+  width: 4rem;
+}
+#map-table button.sign {
+  width: 2rem;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.6rem 0;
+}
+.row label {
+  width: 4.5rem;
+}
+.row input[type='range'] {
+  flex: 1;
+}
+.row output {
+  width: 3rem;
+  text-align: right;
+}
+#all-row label {
+  font-weight: bold;
+}
+#jog-panel select {
+  flex: 1;
+}
+.jog-buttons {
+  justify-content: center;
+}
+.jog-buttons button {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+#jog-center {
+  flex: 2;
+}
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 1rem 0;
+}
+.map-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.anim-buttons button {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+#anim-panel .row label {
+  width: auto;
+}

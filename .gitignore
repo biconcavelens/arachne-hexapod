@@ -1,0 +1,22 @@
+# Python environments, caches, local tool settings
+.venv/
+.claude/
+__pycache__/
+*.pyc
+MUJOCO_LOG.TXT
+
+# Original Vorpal download (CC BY-SA, see NOTICE.md)
+Vorpal needed/
+# Photos of the robot, with the user in frame
+photos/
+# Raw downloads and scratch STL copies
+scratch/
+# Superseded 2026-08-27 model (ChatGPT-built, wrong geometry)
+sim/
+# Third-party paper (Hu, Chen, Lipson): download it yourself
+s44182-025-00031-6.pdf
+
+# Large or regenerable outputs
+*.gif
+**/runs/**/params.pkl
+**/runs/**/real_mock_*.csv

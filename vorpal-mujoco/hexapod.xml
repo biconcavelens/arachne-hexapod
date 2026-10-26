@@ -1,0 +1,76 @@
+<mujoco model="vorpal_hexapod_onshape">
+  <compiler angle="degree" meshdir="meshes"/>
+  <option gravity="0 0 0"/>
+  <visual><global offwidth="1600" offheight="1200"/></visual>
+  <asset>
+    <mesh name="base_mesh" file="base.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="hinge_mesh" file="hinge.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="leg6_mesh" file="leg6.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="leg7_mesh" file="leg7.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="leg8_mesh" file="leg8.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="leg9_mesh" file="leg9.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="leg10_mesh" file="leg10.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="leg11_mesh" file="leg11.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+  <worldbody>
+    <light diffuse=".9 .9 .9" pos="0.2 -0.2 0.6" dir="-0.3 0.3 -1"/>
+    <light diffuse=".4 .4 .4" pos="-0.3 0.2 0.4" dir="0.4 -0.3 -1"/>
+    <body name="base" pos="-0.073922 0.004816 0.012421" quat="1.000000 0.000000 0.000000 0.000000">
+      <geom type="mesh" mesh="base_mesh" rgba="0.75 0.35 0.2 1" contype="0" conaffinity="0"/>
+      <body name="hip0" pos="0.031753 -0.048409 -0.014508" quat="1.000000 0.000000 0.000000 0.000000">
+        <joint name="hip0_joint" type="hinge" axis="0 0 1" pos="0 0 0" range="-90 90"/>
+        <geom name="proxhinge0" type="mesh" mesh="hinge_mesh" pos="0.158329 -0.052372 0.092565" quat="0.224153 0.224153 0.670638 0.670638" rgba="0.95 0.75 0.1 1"/>
+        <body name="knee0" pos="0.003007 0.023980 0.002639" quat="1.000000 0.000000 0.000000 0.000000">
+          <joint name="knee0_joint" type="hinge" axis="-0.601302 -0.799022 0.000000" pos="0 0 0" range="-90 90"/>
+          <geom name="disthinge0" type="mesh" mesh="hinge_mesh" pos="-0.179898 0.024743 -0.053204" quat="0.000000 0.948426 -0.317000 0.000000" rgba="0.2 0.75 0.3 1"/>
+          <geom name="leg6" type="mesh" mesh="leg6_mesh" pos="0.097409 -0.064285 -0.051058" quat="0.000000 0.317000 0.948426 0.000000" rgba="0.25 0.45 0.85 1"/>
+        </body>
+      </body>
+      <body name="hip1" pos="0.057800 0.003294 -0.014508" quat="1.000000 0.000000 0.000000 0.000000">
+        <joint name="hip1_joint" type="hinge" axis="0 0 1" pos="0 0 0" range="-90 90"/>
+        <geom name="proxhinge1" type="mesh" mesh="hinge_mesh" pos="0.136586 0.104016 0.091065" quat="-0.110326 -0.110326 0.698447 0.698447" rgba="0.95 0.75 0.1 1"/>
+        <body name="knee1" pos="0.053096 -0.005330 -0.018513" quat="1.000000 0.000000 0.000000 0.000000">
+          <joint name="knee1_joint" type="hinge" axis="0.308227 -0.951313 0.000000" pos="0 0 0" range="-90 90"/>
+          <geom name="disthinge1" type="mesh" mesh="hinge_mesh" pos="-0.123559 -0.132961 -0.053183" quat="0.000000 0.987753 0.156024 0.000000" rgba="0.2 0.75 0.3 1"/>
+          <geom name="leg7" type="mesh" mesh="leg7_mesh" pos="0.098079 0.005716 0.084491" quat="0.532887 -0.131371 0.831678 0.084174" rgba="0.25 0.45 0.85 1"/>
+        </body>
+      </body>
+      <body name="hip2" pos="0.026047 0.051703 -0.014508" quat="1.000000 0.000000 0.000000 0.000000">
+        <joint name="hip2_joint" type="hinge" axis="0 0 1" pos="0 0 0" range="-90 90"/>
+        <geom name="proxhinge2" type="mesh" mesh="hinge_mesh" pos="-0.012991 0.171191 0.091065" quat="-0.430466 -0.430466 0.560980 0.560980" rgba="0.95 0.75 0.1 1"/>
+        <body name="knee2" pos="0.034027 0.044400 -0.018130" quat="1.000000 0.000000 0.000000 0.000000">
+          <joint name="knee2_joint" type="hinge" axis="0.965932 -0.258796 0.000000" pos="0 0 0" range="-90 90"/>
+          <geom name="disthinge2" type="mesh" mesh="hinge_mesh" pos="0.044342 -0.176093 -0.053204" quat="0.000000 0.793346 0.608771 0.000000" rgba="0.2 0.75 0.3 1"/>
+          <geom name="leg8" type="mesh" mesh="leg8_mesh" pos="0.070149 0.042373 0.112629" quat="0.540999 -0.445271 0.580274 0.415133" rgba="0.25 0.45 0.85 1"/>
+        </body>
+      </body>
+      <body name="hip3" pos="-0.031753 0.048409 -0.014508" quat="1.000000 0.000000 0.000000 0.000000">
+        <joint name="hip3_joint" type="hinge" axis="0 0 1" pos="0 0 0" range="-90 90"/>
+        <geom name="proxhinge3" type="mesh" mesh="hinge_mesh" pos="-0.107938 0.133972 0.091065" quat="0.577664 0.577664 -0.407805 -0.407805" rgba="0.95 0.75 0.1 1"/>
+        <body name="knee3" pos="0.001906 0.055419 -0.018600" quat="1.000000 0.000000 0.000000 0.000000">
+          <joint name="knee3_joint" type="hinge" axis="0.942296 0.334782 0.000000" pos="0 0 0" range="-90 90"/>
+          <geom name="disthinge3" type="mesh" mesh="hinge_mesh" pos="0.136278 -0.119512 -0.053197" quat="0.000000 0.576723 0.816940 0.000000" rgba="0.2 0.75 0.3 1"/>
+          <geom name="leg9" type="mesh" mesh="leg9_mesh" pos="-0.043029 0.099586 0.097564" quat="-0.299358 0.698266 -0.492945 -0.424046" rgba="0.25 0.45 0.85 1"/>
+        </body>
+      </body>
+      <body name="hip4" pos="-0.057800 -0.003294 -0.014508" quat="1.000000 0.000000 0.000000 0.000000">
+        <joint name="hip4_joint" type="hinge" axis="0 0 1" pos="0 0 0" range="-90 90"/>
+        <geom name="proxhinge4" type="mesh" mesh="hinge_mesh" pos="-0.154423 -0.063919 0.091565" quat="0.706704 0.706704 0.023849 0.023849" rgba="0.95 0.75 0.1 1"/>
+        <body name="knee4" pos="-0.053178 0.017585 -0.018149" quat="1.000000 0.000000 0.000000 0.000000">
+          <joint name="knee4_joint" type="hinge" axis="-0.067418 0.997725 0.000000" pos="0 0 0" range="-90 90"/>
+          <geom name="disthinge4" type="mesh" mesh="hinge_mesh" pos="0.151919 0.098870 -0.053197" quat="0.000000 -0.033728 0.999431 0.000000" rgba="0.2 0.75 0.3 1"/>
+          <geom name="leg10" type="mesh" mesh="leg10_mesh" pos="-0.064059 0.020521 0.131627" quat="0.022808 0.736269 0.024847 -0.675848" rgba="0.25 0.45 0.85 1"/>
+        </body>
+      </body>
+      <body name="hip5" pos="-0.026047 -0.051703 -0.014508" quat="1.000000 0.000000 0.000000 0.000000">
+        <joint name="hip5_joint" type="hinge" axis="0 0 1" pos="0 0 0" range="-90 90"/>
+        <geom name="proxhinge5" type="mesh" mesh="hinge_mesh" pos="-0.056038 -0.162661 0.091065" quat="0.636373 0.636373 0.308269 0.308269" rgba="0.95 0.75 0.1 1"/>
+        <body name="knee5" pos="0.042424 -0.027610 -0.024341" quat="1.000000 0.000000 0.000000 0.000000">
+          <joint name="knee5_joint" type="hinge" axis="-0.784696 0.619880 0.000000" pos="0 0 0" range="-90 90"/>
+          <geom name="disthinge5" type="mesh" mesh="hinge_mesh" pos="-0.062141 0.178969 -0.047188" quat="0.000000 -0.435958 0.899967 0.000000" rgba="0.2 0.75 0.3 1"/>
+          <geom name="leg11" type="mesh" mesh="leg11_mesh" pos="-0.095463 -0.029226 0.120389" quat="0.269047 0.708143 0.343036 -0.555404" rgba="0.25 0.45 0.85 1"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

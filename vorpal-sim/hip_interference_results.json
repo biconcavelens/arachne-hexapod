@@ -1,0 +1,52 @@
+{
+  "model": {
+    "hip_radius_mm": 68.5,
+    "leg_reach_mm": 46.4,
+    "leg_half_width_mm": 32.0,
+    "note": "PROVISIONAL: half-width calibrated from a single real hardware touch point (legs 0/1 @ delta +22/-44), not yet confirmed by additional touch points. See script docstring."
+  },
+  "pairs": {
+    "leg0_leg1": {
+      "leg_i": 0,
+      "leg_j": 1,
+      "max_delta_i_toward_j_when_j_neutral_deg": 50.0,
+      "max_delta_i_away_from_j_when_j_neutral_deg": -90.0,
+      "max_equal_and_opposite_swing_deg": 32.0
+    },
+    "leg1_leg2": {
+      "leg_i": 1,
+      "leg_j": 2,
+      "max_delta_i_toward_j_when_j_neutral_deg": 50.0,
+      "max_delta_i_away_from_j_when_j_neutral_deg": -90.0,
+      "max_equal_and_opposite_swing_deg": 32.0
+    },
+    "leg2_leg3": {
+      "leg_i": 2,
+      "leg_j": 3,
+      "max_delta_i_toward_j_when_j_neutral_deg": 50.0,
+      "max_delta_i_away_from_j_when_j_neutral_deg": -90.0,
+      "max_equal_and_opposite_swing_deg": 32.0
+    },
+    "leg3_leg4": {
+      "leg_i": 3,
+      "leg_j": 4,
+      "max_delta_i_toward_j_when_j_neutral_deg": 50.0,
+      "max_delta_i_away_from_j_when_j_neutral_deg": -90.0,
+      "max_equal_and_opposite_swing_deg": 32.0
+    },
+    "leg4_leg5": {
+      "leg_i": 4,
+      "leg_j": 5,
+      "max_delta_i_toward_j_when_j_neutral_deg": 50.0,
+      "max_delta_i_away_from_j_when_j_neutral_deg": -90.0,
+      "max_equal_and_opposite_swing_deg": 32.0
+    },
+    "leg5_leg0": {
+      "leg_i": 5,
+      "leg_j": 0,
+      "max_delta_i_toward_j_when_j_neutral_deg": 50.0,
+      "max_delta_i_away_from_j_when_j_neutral_deg": -90.0,
+      "max_equal_and_opposite_swing_deg": 32.0
+    }
+  }
+}
