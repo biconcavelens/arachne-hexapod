@@ -20,3 +20,9 @@ s44182-025-00031-6.pdf
 *.gif
 **/runs/**/params.pkl
 **/runs/**/real_mock_*.csv
+
+# fault-sim outputs (regenerate with build_scene.py / generate.py / train.py)
+fault-sim/data/
+fault-sim/runs/
+fault-sim/hexapod_camera.xml
+fault-sim/camera_view.png

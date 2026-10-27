@@ -1,0 +1,27 @@
+{
+ "pos_m": [
+  0.00897,
+  0.0,
+  0.10219
+ ],
+ "forward": [
+  0.93969,
+  0.0,
+  -0.34202
+ ],
+ "up": [
+  0.34202,
+  0.0,
+  0.93969
+ ],
+ "mujoco_xyaxes": [
+  0.0,
+  -1.0,
+  0.0,
+  0.34202,
+  0.0,
+  0.93969
+ ],
+ "tilt_deg": 20.0,
+ "note": "base-body frame; MuJoCo cameras look along their -z axis"
+}

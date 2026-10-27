@@ -1,0 +1,7 @@
+mujoco==3.12.0
+numpy
+opencv-python-headless
+torch
+scikit-learn
+pillow            # build_scene.py --check only
+# optional: torchvision (RAFT flow, --flow raft)
