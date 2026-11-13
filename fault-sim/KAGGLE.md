@@ -1,8 +1,20 @@
 # Running fault-sim on Kaggle
 
-Yes, it fits. Generating `gt` data is CPU-only. Training the small Transformer is fast on a
-T4/P100. Only `--egomotion flow` needs rendering, and EGL on Kaggle's GPU images is untested
-here. If it fails, everything still runs in `gt` mode.
+Yes, it fits. The tested way is `kaggle_run.py`, pushed as a script kernel; it runs every step
+and writes `results/status.txt`. A `gt` run (2000 episodes, training, closed loop, videos) takes about
+15 min on a T4. Rendering works with `MUJOCO_GL=egl`. Kaggle only registers Mesa's EGL (CPU, about
+1 min per flow episode), so `kaggle_run.py` also registers `/usr/local/nvidia/lib64/libEGL_nvidia.so.0`
+with glvnd. Rendering then runs on the GPU: 4 videos of 400 frames in 43 s.
+
+Mode `stages` runs each environment stage in `STAGES`: previews, 600 flow episodes, camera-only and
+with-IMU models, the plane model scored on the new stage, closed loop, and videos. A stage takes about
+30 min. The plane model is read from `fault-sim/plane_models/flow_noimu.pt` in the dataset (copied from
+`runs/kaggle_v5/runs/flow_noimu/model.pt`).
+
+Kaggle sometimes attaches the previous dataset version to a kernel pushed right after an upload. To
+catch that, write a fresh stamp to the dataset's `fault-sim/STAMP` and the same value into the pushed
+copy of `kaggle_run.py` (`STAMP = ...`). The run stops at once if they differ. Waiting about a minute
+after the upload before pushing avoided it.
 
 Check your own limits on the account page: there is a weekly GPU quota and a per-session time
 limit. `generate.py` skips episodes it already wrote, so a cut-off session loses nothing that

@@ -63,7 +63,7 @@ class PlaneEgomotion:
             theta = np.linalg.lstsq(self.A * sw[:, None], b * sw, rcond=None)[0]
             r = np.abs(self.A @ theta - b)
             s = 1.4826 * np.median(r) + 1e-9
-            w = np.where(r <= huber * s, 1.0, huber * s / r)
+            w = np.where(r <= huber * s, 1.0, huber * s / np.maximum(r, 1e-12))
         V_c, W_c = theta[:3], theta[3:]
         w_b = self.R_bc @ W_c
         v_b = self.R_bc @ V_c - np.cross(w_b, self.r_c)         # camera velocity -> base-origin velocity

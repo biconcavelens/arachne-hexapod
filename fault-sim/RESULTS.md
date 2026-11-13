@@ -1,0 +1,150 @@
+# Results
+
+Kaggle, T4, kernel `trishanthmellimi/arachne-fault-sim` version 4 (2026-10-28), `kaggle_run.py` mode `gt`.
+Fault-free and faulty runs share each seed's scene, gait and noise. Outputs are in `runs/kaggle_v4/`
+(gitignored). Version 3 has the camera-pipeline numbers.
+
+## Stage B diagnoser, offline (2000 episodes, 400 held out, gt ego-motion)
+
+| | Transformer | logistic regression (pilot) |
+|---|---|---|
+| detection AUROC | **0.97** | 0.65 |
+| right servo, single fault | **74%** | 34% |
+| right type on the faulty servo | 43% | |
+| size error (when type is right) | loss p 0.12, sag 1.0°, deadband 1.7° | |
+
+Validation loss is lowest at epoch 7 of 30 (that checkpoint is kept), so more data or regularisation
+should help. Sag is often called healthy, and loss is confused with both other types: a frozen servo
+and one that moves only 2–5° look alike from the body.
+
+## Closed loop (60 test seeds, 20 s, speed over the last 4 s, median vs the same seed without faults)
+
+| first fault | no recovery | oracle diagnosis + recovery | model + recovery |
+|---|---|---|---|
+| loss | 0.67 | **0.99** | 0.56 |
+| sag | 0.90 | **1.00** | 0.70 |
+| deadband | 0.86 | **0.99** | 0.59 |
+
+With the true labels, the recoveries work: resend, pause and resend, and the dead-band probe plus
+jump-between-extremes gait. With the model, the robot walks slower than with no recovery. It raises
+7.2 false alarms/min on healthy runs and picks the wrong type, and wrong probes and pauses cost
+standing time. The first alarm names the right servo 60% of the time and the right type 33%.
+
+Dead-band estimate from the probe (oracle runs): within 1° of the truth in 9 of 15 probes; the rest
+saw no jump and fell back to 24°. Summing the two signals' z-scores (now in `recovery.py`) gives 11
+of 15 on the same traces. That rule was chosen on those traces, so it needs a fresh run to confirm.
+The estimate only decides whether the workaround is usable, so it matters less than it looks.
+
+## Camera pipeline (version 3: 24 episodes, DIS optical flow, plane ego-motion)
+
+| | vx | vy | vz | wx | wy | wz |
+|---|---|---|---|---|---|---|
+| correlation with true twist | 0.91 | 0.72 | 0.26 | 0.16 | 0.16 | 0.86 |
+
+Forward speed and turning are tracked well, body roll and pitch rates are not (600 episodes in
+version 5: 0.91 / 0.76 / 0.26 / 0.23 / 0.21 / 0.88). The diagnoser does not need them; see the IMU
+comparison below. Camera frames are dark in the renders, which may limit flow.
+
+## Without the IMU (version 5, 2026-10-28)
+
+There are two ways to lose the IMU. "IMU dropped": the IMU-trained model runs with its IMU inputs
+held at the training mean. "Camera only": a model trained and run with no IMU. Offline numbers are
+from held-out episodes: 400 for gt, 120 for flow. Flow models saw 600 episodes, gt models 2000.
+
+| | detection AUROC | right servo, single fault | right type |
+|---|---|---|---|
+| gt, with IMU | 0.967 | 74% | 43% |
+| gt, IMU dropped | 0.955 | 63% | 34% |
+| gt, camera only | 0.966 | 74% | 43% |
+| flow, with IMU | 0.984 | 75% | 28% |
+| flow, IMU dropped | 0.984 | 75% | 29% |
+| flow, camera only | 0.984 | **77%** | 32% |
+
+Closed loop: median speed vs healthy. gt runs use 60 seeds, where no recovery scores 0.86. Flow runs
+use the first 40 of those seeds, where no recovery scores 0.82.
+
+| | loss | sag | deadband | all | false alarms/min | first alarm right servo |
+|---|---|---|---|---|---|---|
+| gt, with IMU | 0.56 | 0.70 | 0.57 | 0.65 | 7.3 | 60% |
+| gt, IMU dropped | 0.57 | 0.96 | 0.92 | 0.74 | 2.0 | 66% |
+| gt, camera only | 0.56 | 0.66 | 0.54 | 0.60 | 6.2 | 67% |
+| flow, with IMU | 0.82 | 0.83 | 0.83 | 0.82 | 2.2 | 58% |
+| flow, IMU dropped | 0.52 | 0.83 | 0.75 | 0.75 | 1.9 | 45% |
+| flow, camera only | 0.55 | 0.91 | 0.75 | 0.75 | 1.8 | 53% |
+
+In simulation the IMU adds nothing to the diagnosis: camera-only models match IMU models on both
+feature sets. The IMU-trained gt model leans on the IMU somewhat (servo 74% to 63% when it is
+removed), but a model trained without it does not miss it. Closed-loop speed mostly tracks the
+false-alarm rate (each false alarm costs standing time). Every model is still at or below no
+recovery, so the alarm policy, not the sensor, is the bottleneck. Caveats: the simulated IMU has
+only white noise (no bias, vibration or mount flex), and the simulated flow has no blur, rolling
+shutter or real floor; flow results rest on 120 validation and 40 closed-loop episodes.
+
+## Environment stages (versions 9 and 10, 2026-11-14)
+
+The professor's plan: build realistic environments step by step, still purely in sim. They are set with
+`FAULTSIM_STAGE` (`environment.py`).
+
+- **Stage 0:** the textured plane (everything above).
+- **Stage 1:** a lit room. Painted or wallpapered walls with skirting, a door and a lit window.
+  The floor is wood planks, tiles, carpet or concrete, with gloss on wood and tiles. One to four
+  ceiling spotlights (warm to cool white) and dim ambient light; two lights cast shadows.
+- **Stage 2:** stage 1 plus about 10 static objects per room: boxes, cardboard boxes, cabinets
+  against the walls, bins, balls, tables, chairs, and rugs.
+
+Room size, room angle, materials, lights and objects are re-drawn every episode. Textures are
+procedural. No solid object is placed within 1.5 m of the start or on the strip ahead, so the robot
+never touches anything: on the same 40 test seeds, stages 0, 1 and 2 walk identically (checked).
+The first stage 2 run (version 9) let the steering robot bump into furniture on 5 of 40 seeds, so
+stage 2 was rerun (version 10). Previews of four random rooms per stage are in
+`runs/kaggle_v9/camera_view_stage1.png` and `runs/kaggle_v10/camera_view_stage2.png`, and videos in
+`runs/kaggle_v9/runs/s1_videos/` and `runs/kaggle_v10/runs/s2_videos/`.
+
+All stages use optical flow, 600 episodes and the same seeds, with 120 held-out episodes:
+
+| | camera only: AUROC / right servo / right type | with IMU: AUROC / servo / type | IMU dropped: servo | plane-trained model, tested here: AUROC / servo |
+|---|---|---|---|---|
+| stage 0, plane | 0.984 / 77% / 32% | 0.984 / 75% / 28% | 75% | (trained here) |
+| stage 1, room | 0.984 / 77% / 29% | 0.982 / 79% / 26% | 76% | 0.982 / 76% |
+| stage 2, room + objects | 0.984 / 75% / 30% | 0.983 / 79% / 27% | 79% | 0.984 / 73% |
+
+Closed loop, camera-only model: 40 seeds, median speed relative to healthy.
+
+| | no recovery: loss / sag / dead band / all | model: loss / sag / dead band / all | false alarms/min | first alarm right servo |
+|---|---|---|---|---|
+| stage 0 | 0.54 / 0.81 / 0.91 / 0.82 | 0.55 / 0.91 / 0.75 / 0.75 | 1.8 | 53% |
+| stage 1 | 0.54 / 0.81 / 0.91 / 0.82 | 0.58 / 0.78 / 0.68 / 0.69 | 3.0 | 53% |
+| stage 2 | 0.54 / 0.81 / 0.91 / 0.82 | 0.60 / 0.82 / 0.67 / 0.73 | 3.9 | 63% |
+
+Optical-flow ego-motion, correlation with the true body velocity (vx / vy / vz / wx / wy / wz):
+
+- plane: 0.91 / 0.76 / 0.26 / 0.23 / 0.21 / 0.88
+- stage 1: 0.88 / 0.71 / 0.17 / 0.23 / 0.21 / 0.87
+- stage 2: 0.86 / 0.72 / 0.15 / 0.23 / 0.21 / 0.87
+
+What changed:
+
+- **The diagnosis does not get harder in a lit room with furniture.** Detection stays at 0.98 and the
+  right servo at 74–79%.
+- **The model trained on the plane works in the rooms without retraining** (76% / 73% right servo).
+  The diagnoser's inputs (body motion plus a coarse 4×4 flow grid) do not depend on the scene, as
+  long as the floor has texture.
+- **The plane-motion fit gets slightly worse.** Walls and objects break the flat-floor assumption;
+  forward speed falls from 0.91 to 0.86, but the robust fit absorbs most of it.
+- **False alarms rise** (1.8, 3.0, 3.9 per minute). The closed loop is still below no recovery in
+  every stage, so the alarm policy is still the bottleneck.
+
+Caveats:
+
+- MuJoCo's renderer has no global illumination, and the textures are procedural, not photographs.
+- The objects are static, the floor is flat, and there is no camera noise or motion blur yet.
+- One training seed per stage; closed-loop differences of a few hundredths are within noise at 40 seeds.
+
+## Next
+
+1. Choose the recovery from the servo alone, escalating by cost: resend, then pause, then probe.
+   This avoids the weak type head.
+2. Cut false alarms with a higher threshold, more consecutive windows, or more training data.
+3. Environment stage 3: more clutter and variety (denser objects, more textures, darker and brighter rooms).
+   Stage 4: objects that move by themselves (camera motion the robot did not cause).
+   Then rougher terrain, step by step.

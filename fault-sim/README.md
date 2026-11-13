@@ -27,8 +27,9 @@ servo's travel is not more than db + 3°, the gait is left as it is and the even
 
 ```
 config.py        every number
-build_scene.py   hexapod_camera.xml: lean physics model + visual meshes + the new cap + body camera
-                 (--check renders the camera view and reports how much of it is robot)
+environment.py   environment stages: 1 lit room, 2 room + static objects (FAULTSIM_STAGE=1/2; 0 = plane)
+build_scene.py   the scene XML: lean physics model + visual meshes + the new cap + body camera (+ room)
+                 (--check renders a sheet of random scenes and reports how much of the view is robot)
 generate.py      episodes -> data/<name>/ep_*.npz   (resumable)
 train.py         Stage B: healthy-motion model, then a Transformer/GRU diagnoser -> runs/<name>/
 closed_loop.py   walk, diagnose online, recover; compares healthy / no recovery / recovery

@@ -13,7 +13,10 @@ MESH_DIR = os.path.join(ROOT, "vorpal-mujoco", "meshes")
 CAP_STL = os.path.join(ROOT, "hardware", "camera_cap", "cap_with_camera_mount.stl")
 CAMERA_POSE = os.path.join(ROOT, "hardware", "camera_cap", "camera_pose.json")
 GAIT_JSON = os.path.join(ROOT, "servo-web-control", "assets", "gaits", "forward.json")
-SCENE_XML = os.path.join(HERE, "hexapod_camera.xml")                    # written by build_scene.py
+# environment stage, from the env var so every script and worker process agrees (environment.py):
+#   0 textured plane, 1 lit room, 2 room with static objects
+STAGE = int(os.environ.get("FAULTSIM_STAGE", "0"))
+SCENE_XML = os.path.join(HERE, f"hexapod_stage{STAGE}.xml" if STAGE else "hexapod_camera.xml")   # written by build_scene.py
 
 # ---- timing
 CTRL_DT = 0.05            # 20 Hz commands, as on the real robot (web page -> Bridge)

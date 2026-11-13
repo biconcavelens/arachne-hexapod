@@ -75,8 +75,11 @@ if __name__ == "__main__":
     ap.add_argument("--seconds", type=float, default=20.0)
     ap.add_argument("--egomotion", choices=["gt", "flow"], default="gt")
     ap.add_argument("--out", default="runs/closed_loop.json")
+    ap.add_argument("--drop-imu", action="store_true", help="IMU missing at test (inputs held at their training mean)")
     a = ap.parse_args()
     diag = ModelDiagnosis(a.ckpt) if a.mode == "model" else None
+    if a.drop_imu:
+        diag.norm["no_imu"] = True
     eps = []
     for i in range(a.episodes):
         eps.append(episode(a.first_seed + i, a.mode, diag, a.seconds, a.egomotion))

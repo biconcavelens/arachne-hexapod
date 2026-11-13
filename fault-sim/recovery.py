@@ -25,15 +25,12 @@ from gaits_lib import PROBE_PRE_S, REST, DeadbandWorkaround, probe_command
 def estimate_deadband(offsets, ang_rate, lin_speed, base_frac=0.2, k=6.0):
     """Command offset (deg) at which the body first moves during a probe ramp.
 
-    The baseline is the first part of the ramp, where the servo has not moved yet."""
+    Both signals are z-scored against the first part of the ramp, where the servo has not
+    moved yet, and summed: on their own each is often too weak to clear k (Kaggle run 4)."""
     n0 = max(3, int(len(offsets) * base_frac))
-    for sig in (np.asarray(ang_rate), np.asarray(lin_speed)):
-        mu, sd = sig[:n0].mean(), max(sig[:n0].std(), 1e-3)
-        hits = np.flatnonzero(sig[n0:] > mu + k * sd)
-        if hits.size:
-            first = n0 + hits[0]
-            return float(offsets[max(first - 1, 0)])
-    return float(offsets[-1])            # never moved: at least the full ramp
+    z = sum((s - s[:n0].mean()) / max(s[:n0].std(), 1e-3) for s in (np.asarray(ang_rate), np.asarray(lin_speed)))
+    hits = np.flatnonzero(z[n0:] > k)
+    return float(offsets[max(n0 + hits[0] - 1, 0)]) if hits.size else float(offsets[-1])   # never moved: at least the full ramp
 
 
 class ModelDiagnosis:
@@ -69,6 +66,8 @@ class RecoveryController:
         self.rows = deque(maxlen=C.WINDOW + HIST - 1)
         self.state, self.k = "walk", 0
         self.streak, self.attempts, self.events = {}, {}, []
+        self.handled = set()                 # servos already probed: their dead band is dealt with for this run
+        self.last_p = None                   # latest (12, n_types) diagnosis, for videos
 
     def phase(self, t):
         return self.gait.phase(t) if self.state == "walk" else 0.0
@@ -107,7 +106,7 @@ class RecoveryController:
         self.k += 1
         if len(self.rows) < self.rows.maxlen or self.k % C.STRIDE:
             return
-        p = self._diagnose(t)
+        p = self.last_p = self._diagnose(t)
         for j in range(12):
             p_fault = 1 - p[j, 0]
             if p_fault <= self.thr:
@@ -132,6 +131,8 @@ class RecoveryController:
     # ---- actions
     def _alarm(self, t, j, ty):
         name = C.FAULT_TYPES[ty]
+        if name == "deadband" and j in self.handled:
+            return
         self.events.append({"t": t, "alarm": name, "servo": j})
         if self.attempts.get(j, 0) >= C.MAX_ATTEMPTS:
             return
@@ -154,6 +155,10 @@ class RecoveryController:
         wrapped = DeadbandWorkaround(self.gait, j, db)
         if wrapped.usable:
             self.gait = wrapped
+        self.handled.add(j)
         self.events.append({"t": t, "action": "deadband workaround" if wrapped.usable else "deadband too wide to work around",
-                            "servo": j, "estimate_deg": round(db, 1)})
+                            "servo": j, "estimate_deg": round(db, 1),
+                            "trace": {"off": [round(x, 2) for x in self.probe_off],      # to debug missed jumps
+                                      "ang": [round(x, 4) for x in self.probe_ang],
+                                      "lin": [round(x, 4) for x in self.probe_lin]}})
         self._resume()

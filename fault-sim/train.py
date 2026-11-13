@@ -142,7 +142,9 @@ def baseline(eps, tr, va, X):
     det = LogisticRegression(max_iter=2000, C=0.05).fit(Ftr, (ttr > 0).any(1))
     res["baseline_detect_auroc"] = float(roc_auc_score((tva > 0).any(1), det.predict_proba(Fva)[:, 1]))
     s_tr, s_va = (ttr > 0).sum(1) == 1, (tva > 0).sum(1) == 1
-    loc = LogisticRegression(max_iter=2000, C=0.05).fit(Ftr[s_tr], (ttr[s_tr] > 0).argmax(1))
+    if not (s_tr.any() and s_va.any()):
+        return res
+    loc =LogisticRegression(max_iter=2000, C=0.05).fit(Ftr[s_tr], (ttr[s_tr] > 0).argmax(1))
     res["baseline_which_servo_acc_single_fault"] = float((loc.predict(Fva[s_va]) == (tva[s_va] > 0).argmax(1)).mean())
     return res
 
@@ -158,7 +160,10 @@ if __name__ == "__main__":
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--val-frac", type=float, default=0.2)
     ap.add_argument("--baseline", action="store_true")
+    ap.add_argument("--no-imu", action="store_true", help="camera-only model: IMU inputs held at their mean")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--eval", metavar="CKPT", help="no training: score this model on the validation split of --data "
+                                                   "(e.g. a model trained in another environment stage)")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     torch.manual_seed(a.seed)
@@ -176,6 +181,15 @@ if __name__ == "__main__":
     n_va = max(1, int(len(eps) * a.val_frac))
     va_eps, tr_eps = set(perm[:n_va].tolist()), set(perm[n_va:].tolist())
     log(f"{len(eps)} episodes ({len(tr_eps)} train / {len(va_eps)} val), device {device}")
+    if a.eval:
+        healthy, diag, norm, _ = M.load(a.eval, device)
+        X = [M.window_inputs(ep["step"], ep["hin"], healthy, norm, device) if i in va_eps else None for i, ep in enumerate(eps)]
+        idx = window_index(eps)
+        va = idx[np.isin(idx[:, 0], list(va_eps))]
+        res = metrics(*predict(diag, torch.utils.data.DataLoader(Windows(eps, va, X), batch_size=1024), device))
+        json.dump(res, open(os.path.join(a.out, "metrics.json"), "w"), indent=1)
+        log(f"evaluated {a.eval}: " + json.dumps({k: round(v, 3) for k, v in res.items() if isinstance(v, float)}))
+        raise SystemExit
 
     healthy, norm = fit_healthy([eps[i] for i in tr_eps], device, a.healthy_epochs, log)
     with torch.no_grad():
@@ -188,6 +202,7 @@ if __name__ == "__main__":
     Rr = np.concatenate(resid_tr)
     norm.update(s_mu=S.mean(0), s_sd=S.std(0) + 1e-6, r_mu=Rr.mean(0), r_sd=Rr.std(0) + 1e-6)
     norm = {k: v.astype(np.float32) for k, v in norm.items()}
+    norm["no_imu"] = a.no_imu                   # saved with the model, so inference does the same
     healthy = healthy.float()
     X = [M.window_inputs(ep["step"], ep["hin"], healthy, norm, device) for ep in eps]
 
@@ -233,6 +248,13 @@ if __name__ == "__main__":
     res = metrics(out, lab)
     if a.baseline:
         res.update(baseline(eps, tr, va, X))
+    if not a.no_imu:                            # the same model with the IMU missing at test time
+        Xd = [M.window_inputs(ep["step"], ep["hin"], healthy, dict(norm, no_imu=True), device) if i in va_eps else None
+              for i, ep in enumerate(eps)]
+        dl_d = torch.utils.data.DataLoader(Windows(eps, va, Xd), batch_size=1024, shuffle=False, num_workers=0)
+        res["imu_dropped_at_test"] = metrics(*predict(diag, dl_d, device))
+        log("IMU dropped at test: " + json.dumps({k: round(v, 3) for k, v in res["imu_dropped_at_test"].items()
+                                                  if isinstance(v, float)}))
     M.save(os.path.join(a.out, "model.pt"), healthy.cpu(), diag.cpu(), norm, cfg)
     json.dump(res, open(os.path.join(a.out, "metrics.json"), "w"), indent=1)
     log(json.dumps({k: v for k, v in res.items() if not isinstance(v, dict)}, indent=1))

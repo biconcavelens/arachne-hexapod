@@ -25,4 +25,5 @@ s44182-025-00031-6.pdf
 fault-sim/data/
 fault-sim/runs/
 fault-sim/hexapod_camera.xml
-fault-sim/camera_view.png
+fault-sim/hexapod_stage*.xml
+fault-sim/camera_view*.png

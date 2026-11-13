@@ -21,6 +21,7 @@ D_PRED = C.FEAT_EGO + C.FEAT_IMU                                # 47
 HIST = 6                                                         # command steps the healthy model sees
 D_HEALTHY_IN = HIST * 12 + C.FEAT_PHASE
 D_IN = D_STEP + D_PRED                                           # 108
+IMU_COLS = np.r_[C.FEAT_EGO:D_PRED, D_STEP + C.FEAT_EGO:D_STEP + D_PRED]   # measured IMU and its residual
 N_TYPES = len(C.FAULT_TYPES)
 SIZE_SCALE = {"none": 1.0, "loss": 1.0, "sag": 5.0, "deadband": 20.0}
 
@@ -104,4 +105,7 @@ def window_inputs(step, healthy_in, healthy, norm, device="cpu"):
         hx = torch.from_numpy((healthy_in - norm["h_mu"]) / norm["h_sd"]).to(device)
         pred = healthy(hx).cpu().numpy() * norm["p_sd"] + norm["p_mu"]
     resid = step[:, :D_PRED] - pred
-    return np.concatenate([(step - norm["s_mu"]) / norm["s_sd"], (resid - norm["r_mu"]) / norm["r_sd"]], axis=1).astype(np.float32)
+    x = np.concatenate([(step - norm["s_mu"]) / norm["s_sd"], (resid - norm["r_mu"]) / norm["r_sd"]], axis=1).astype(np.float32)
+    if norm.get("no_imu"):                # no IMU: its inputs sit at the training mean (0 once normalised)
+        x[:, IMU_COLS] = 0
+    return x

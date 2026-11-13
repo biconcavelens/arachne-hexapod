@@ -23,6 +23,7 @@ import mujoco
 import numpy as np
 
 import config as C
+import environment
 from egomotion import PlaneEgomotion, StageA, camera_axes_in_body, grid_from_twist, intrinsics
 from faults import ServoBank
 from gaits_lib import Gait
@@ -60,14 +61,17 @@ def randomize(m, rng):
     m.body_mass[m.body("base").id] *= rng.uniform(0.95, 1.05)
     kp = m.actuator_gainprm[:, 0] * rng.uniform(0.8, 1.2, m.nu)          # servo strength varies per unit
     m.actuator_gainprm[:, 0], m.actuator_biasprm[:, 1] = kp, -kp
-    t = m.texture("floor_tex").id
-    w, h, adr = m.tex_width[t], m.tex_height[t], m.tex_adr[t]
-    nch = int(m.tex_nchannel[t]) if hasattr(m, "tex_nchannel") else 3
-    tex = floor_texture(rng, w, h)
-    if nch == 4:
-        tex = np.concatenate([tex, np.full((h, w, 1), 255, np.uint8)], axis=-1)
-    m.tex_data[adr:adr + w * h * nch] = tex.reshape(-1)
-    m.light_diffuse[:] *= rng.uniform(0.6, 1.2)
+    if C.STAGE:                                       # room, lights (and objects): environment.py
+        environment.randomize(m, rng)
+    else:
+        t = m.texture("floor_tex").id
+        w, h, adr = m.tex_width[t], m.tex_height[t], m.tex_adr[t]
+        nch = int(m.tex_nchannel[t]) if hasattr(m, "tex_nchannel") else 3
+        tex = floor_texture(rng, w, h)
+        if nch == 4:
+            tex = np.concatenate([tex, np.full((h, w, 1), 255, np.uint8)], axis=-1)
+        m.tex_data[adr:adr + w * h * nch] = tex.reshape(-1)
+        m.light_diffuse[:] *= rng.uniform(0.6, 1.2)
     cam = m.camera("ego").id
     m.cam_pos[cam] += rng.normal(0, C.CAM_POS_JITTER, 3)
     axis = rng.normal(size=3)
@@ -83,8 +87,9 @@ def movable_servos(gait):
 
 
 def run_episode(seed, faults, gait=None, seconds=C.EPISODE_S, egomotion="gt", flow_method="dis",
-                controller=None, bank=None, randomize_scene=True, keep_frames=False):
-    """Simulate one episode. controller (optional) supplies commands and sees every step (closed loop)."""
+                controller=None, bank=None, randomize_scene=True, keep_frames=False, on_step=None):
+    """Simulate one episode. controller (optional) supplies commands and sees every step (closed loop).
+    on_step(m, d, t) (optional) is called after each control step's physics, e.g. to render videos."""
     rng = np.random.default_rng([seed, 2])
     m = copy.deepcopy(base_model())
     if randomize_scene:
@@ -119,6 +124,8 @@ def run_episode(seed, faults, gait=None, seconds=C.EPISODE_S, egomotion="gt", fl
         d.ctrl[:] = np.radians(target)
         for _ in range(C.N_SUBSTEPS):
             mujoco.mj_step(m, d)
+        if on_step is not None:
+            on_step(m, d, t)
 
         R = d.xmat[base].reshape(3, 3)
         v = d.qvel[0:3].copy()
