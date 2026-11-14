@@ -160,7 +160,8 @@ Caveats:
 
 Stages 3 and 4 walk identically to stages 0-2 on all 40 test seeds (checked), so only the image
 changes. From stage 5 the ground changes the walking, so those stages have their own no-recovery
-reference. Previews are in `runs/kaggle_v13/camera_view_stage{3,4,5,7}.png`, videos in
+reference. Previews are in `runs/kaggle_v13/camera_view_stage{3,4,5,7}.png` and
+`runs/kaggle_v14/camera_view_stage6.png`, videos in
 `runs/kaggle_v13/runs/s*_videos/` and `runs/kaggle_v14/runs/s6_videos/`.
 
 Same protocol as above: optical flow, 600 episodes, 120 held out.
