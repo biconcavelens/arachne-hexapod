@@ -14,7 +14,7 @@ import time
 import zipfile
 
 MODE = "stages"
-STAGES = (1, 2)
+STAGES = (6,)
 W = "/kaggle/working"
 REPO, OUT = os.path.join(W, "arachne"), os.path.join(W, "results")
 FS = os.path.join(REPO, "fault-sim")

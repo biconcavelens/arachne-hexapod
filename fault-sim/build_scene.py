@@ -78,25 +78,33 @@ def check(seeds=(0, 1, 2, 3)):
     rows, worst = [], 0.0
     for seed in seeds:
         m = copy.deepcopy(base)
-        randomize(m, np.random.default_rng(seed))             # the scene as the episodes see it
+        animate = randomize(m, np.random.default_rng(seed))   # the scene as the episodes see it
         d = mujoco.MjData(m)
         mujoco.mj_resetDataKeyframe(m, d, 0)
         ren = mujoco.Renderer(m, 360, 480)
         cams = {"behind": (1.0, 20.0, -18.0), "overview": (5.0, 30.0, -50.0)}   # distance, azimuth, elevation
         gait, shots = Gait(), None
-        for k in range(int(4.0 / C.CTRL_DT)):
+        walk_s = 9.0 if animate else 4.0                     # movers start at 1-10 s: snapshot late enough to see some
+        for k in range(int(walk_s / C.CTRL_DT)):
             t = k * C.CTRL_DT
             d.ctrl[:] = np.radians(gait.command(t))
+            if animate:
+                animate(d, t)
             for _ in range(C.N_SUBSTEPS):
                 mujoco.mj_step(m, d)
-            if seed == seeds[0]:
+            if seed == seeds[0] and worst is not None:
                 ren.enable_segmentation_rendering()
                 ren.update_scene(d, camera="ego")
-                seg = ren.render()
+                try:
+                    seg = ren.render()
+                    robot = (seg[..., 1] == int(mujoco.mjtObj.mjOBJ_GEOM)) & np.isin(seg[..., 0], robot_geoms)
+                    worst = max(worst, robot.mean())
+                except IndexError:                           # MuJoCo's segment lookup overflows in big scenes (stage 3+)
+                    worst = None                             # and leaves the scene in segment colours: switch them off
+                    ren.scene.flags[mujoco.mjtRndFlag.mjRND_SEGMENT] = False
+                    ren.scene.flags[mujoco.mjtRndFlag.mjRND_IDCOLOR] = False
                 ren.disable_segmentation_rendering()
-                robot = (seg[..., 1] == int(mujoco.mjtObj.mjOBJ_GEOM)) & np.isin(seg[..., 0], robot_geoms)
-                worst = max(worst, robot.mean())
-            if shots is None and t > 3.0:
+            if shots is None and t > walk_s - 1.0:
                 ren.update_scene(d, camera="ego")
                 shots = [ren.render()]
                 for dist, az, el in cams.values():
@@ -109,7 +117,8 @@ def check(seeds=(0, 1, 2, 3)):
         rows.append(np.concatenate(shots, axis=1))
     name = f"camera_view_stage{C.STAGE}.png" if C.STAGE else "camera_view.png"
     Image.fromarray(np.concatenate(rows, axis=0)).save(os.path.join(C.HERE, name))
-    print(f"stage {C.STAGE}: robot pixels in the camera view: worst {worst * 100:.2f}% over 4 s of walking "
+    robot = "not measured" if worst is None else f"worst {worst * 100:.2f}%"
+    print(f"stage {C.STAGE}: robot pixels in the camera view: {robot} while walking "
           f"(fovy {C.FOVY_DEG} deg, tilt {C.camera_pose()['tilt_deg']} deg) -> {name}")
 
 

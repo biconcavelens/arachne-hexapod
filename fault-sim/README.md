@@ -27,7 +27,9 @@ servo's travel is not more than db + 3°, the gait is left as it is and the even
 
 ```
 config.py        every number
-environment.py   environment stages: 1 lit room, 2 room + static objects (FAULTSIM_STAGE=1/2; 0 = plane)
+environment.py   environment stages (FAULTSIM_STAGE; 0 = plane): 1 lit room, 2 room + objects, 3 dense clutter,
+                 4 clutter + things moving by themselves, 5 outdoor hills, 6 rough ground (stones up to half
+                 a step), 7 stones as tall as a step
 build_scene.py   the scene XML: lean physics model + visual meshes + the new cap + body camera (+ room)
                  (--check renders a sheet of random scenes and reports how much of the view is robot)
 generate.py      episodes -> data/<name>/ep_*.npz   (resumable)

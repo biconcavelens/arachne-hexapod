@@ -140,11 +140,87 @@ Caveats:
 - The objects are static, the floor is flat, and there is no camera noise or motion blur yet.
 - One training seed per stage; closed-loop differences of a few hundredths are within noise at 40 seeds.
 
+## Environment stages 3-7 (versions 13 and 14, 2026-11-14)
+
+- **Stage 3, dense clutter:** about twice the objects of stage 2. It adds bookshelves, sofas, plants, floor
+  lamps with their own light, shoes, papers on the floor and pictures on the walls. Lighting runs
+  from dim to bright, sometimes tinted.
+- **Stage 4, things that move by themselves:** stage 3 plus a robot vacuum, rolling balls, a sliding box and a
+  person's legs walking past, crossing the view or passing alongside, starting at 1-10 s. They are
+  visual only, so the camera sees motion the robot did not cause.
+- **Stage 5, outdoor hills:** grass, dirt or gravel ground on hills of 5-9°, with sky, a sun at 20-75° casting
+  shadows, rocks, bushes and trees. The ground is a detailed patch where the robot walks plus a
+  coarse far field, because one fine heightfield made rendering 40× slower.
+- **Stage 6, rough ground:** stage 5 plus bumps of 2-5 mm and stones of 4-12 mm, about half of what the
+  gait lifts a foot (17-23 mm).
+- **Stage 7, rougher still:** hills of 7-11°, bumps of 5-10 mm and stones of 8-25 mm, as tall as the foot
+  lift. Version 13 ran this as "stage 6". Same code path and random draws, so the results in
+  `runs/kaggle_v13/runs/s7_*` were renamed. Stage 6 was then made milder (version 14), because the
+  healthy robot stalls on stage 7.
+
+Stages 3 and 4 walk identically to stages 0-2 on all 40 test seeds (checked), so only the image
+changes. From stage 5 the ground changes the walking, so those stages have their own no-recovery
+reference. Previews are in `runs/kaggle_v13/camera_view_stage{3,4,5,7}.png`, videos in
+`runs/kaggle_v13/runs/s*_videos/`.
+
+Same protocol as above: optical flow, 600 episodes, 120 held out.
+
+| | camera only: AUROC / right servo / right type | with IMU: AUROC / servo / type | IMU dropped: servo | plane-trained model, tested here: AUROC / servo |
+|---|---|---|---|---|
+| stage 0, plane | 0.984 / 77% / 32% | 0.984 / 75% / 28% | 75% | (trained here) |
+| stage 3, clutter | 0.984 / 71% / 26% | 0.980 / 81% / 30% | 79% | 0.972 / 79% |
+| stage 4, + movers | 0.982 / 76% / 31% | 0.980 / 78% / 27% | 78% | 0.971 / 78% |
+| stage 5, hills | 0.957 / 62% / 24% | 0.959 / 66% / 23% | 62% | 0.825 / 51% |
+| stage 7, stones as tall as a step | 0.901 / 50% / 16% | 0.913 / 49% / 17% | 50% | 0.741 / 33% |
+
+Closed loop, camera-only model: 40 seeds, median speed relative to the same seed walking healthy.
+
+| | no recovery: loss / sag / dead band / all | model: loss / sag / dead band / all | false alarms/min | first alarm right servo |
+|---|---|---|---|---|
+| stage 0 | 0.54 / 0.81 / 0.91 / 0.82 | 0.55 / 0.91 / 0.75 / 0.75 | 1.8 | 53% |
+| stage 3 | 0.54 / 0.81 / 0.91 / 0.82 | 0.53 / 0.83 / 0.51 / 0.67 | 2.1 | 63% |
+| stage 4 | 0.54 / 0.81 / 0.91 / 0.82 | 0.73 / 0.65 / 0.65 / 0.65 | 3.6 | 51% |
+| stage 5 | 0.51 / 0.74 / 0.84 / 0.71 | 0.61 / 0.64 / 0.39 / 0.61 | 4.5 | 49% |
+| stage 7 | (not meaningful, see below) | | 6.8 | 45% |
+
+Optical-flow ego-motion, correlation with the true body velocity (vx / vy / vz / wx / wy / wz):
+
+- plane: 0.91 / 0.76 / 0.26 / 0.23 / 0.21 / 0.88
+- stage 3: 0.86 / 0.75 / 0.15 / 0.23 / 0.21 / 0.88
+- stage 4: 0.85 / 0.70 / 0.14 / 0.23 / 0.21 / 0.87
+- stage 5: 0.90 / 0.74 / 0.29 / 0.37 / 0.34 / 0.88
+- stage 7: 0.89 / 0.83 / 0.61 / 0.55 / 0.52 / 0.87
+
+What changed:
+
+- **Clutter and moving objects do not hurt the offline diagnosis.** Detection stays at 0.98, and the
+  plane-trained model still finds the right servo 78-79% of the time. The camera-only 71% on stage 3
+  is within training noise: the stage 3 model with IMU, which in sim does not use the IMU (79% with
+  it dropped), gets 81%.
+- **Moving objects raise false alarms** (2.1 to 3.6 per minute, stage 3 to stage 4). The windows where
+  something crosses the view look like a fault.
+- **Hills are the first real drop:** 62% right servo when trained on hills, and 51% for the
+  plane-trained model. The flow measures the body motion as well as on the plane or better, so the
+  likely cause is the walking itself: slopes tilt and slow the body in ways that look like faults.
+  This is untested.
+- **On stage 7 the gait, not the diagnoser, is the limit.** The healthy robot's median speed falls to
+  12 mm/s (43 mm/s on stage 5), and 16 of 40 healthy runs move less than 5 mm/s. It does not fall;
+  its feet catch on stones as tall as its step. Speed ratios against a stalled healthy run mean
+  nothing, so stage 7's closed loop is not scored. Its offline numbers (50% right servo) mix fault
+  signatures with legs blocked by stones. The higher vz/wx/wy flow correlations on stages 5-7 come
+  from the body bouncing more (larger true motion), not from better flow.
+
+Caveats as above, plus: the movers are simple shapes (the person is two swinging legs), and the
+closed loop at 40 seeds swings by about ±0.1 between stages without any real change (stages 3 and 4
+walk identically, yet their model rows differ).
+
 ## Next
 
 1. Choose the recovery from the servo alone, escalating by cost: resend, then pause, then probe.
    This avoids the weak type head.
 2. Cut false alarms with a higher threshold, more consecutive windows, or more training data.
-3. Environment stage 3: more clutter and variety (denser objects, more textures, darker and brighter rooms).
-   Stage 4: objects that move by themselves (camera motion the robot did not cause).
-   Then rougher terrain, step by step.
+   Moving objects now account for part of them.
+3. Terrain: give the diagnoser what it needs to tell slope from fault, for example the gravity
+   direction from the flow or the IMU (the IMU may finally matter here). Then stage 7 needs a
+   higher-stepping gait before it can say anything about faults.
+4. Combine terrain with moving objects, and add camera noise and motion blur.

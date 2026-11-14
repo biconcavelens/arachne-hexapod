@@ -55,14 +55,16 @@ def floor_texture(rng, w, h):
 
 
 def randomize(m, rng):
-    """Per-episode physics and appearance randomisation (in place)."""
+    """Per-episode physics and appearance randomisation (in place).
+    Returns animate(d, t) for stages with moving objects (call it every step), else None."""
+    animate = None
     feet = [m.geom(f"foot{k}").id for k in range(6)]
     m.geom_friction[feet, 0] = rng.uniform(0.6, 1.2)
     m.body_mass[m.body("base").id] *= rng.uniform(0.95, 1.05)
     kp = m.actuator_gainprm[:, 0] * rng.uniform(0.8, 1.2, m.nu)          # servo strength varies per unit
     m.actuator_gainprm[:, 0], m.actuator_biasprm[:, 1] = kp, -kp
-    if C.STAGE:                                       # room, lights (and objects): environment.py
-        environment.randomize(m, rng)
+    if C.STAGE:                                       # room / outdoors, lights, objects, movers: environment.py
+        animate = environment.randomize(m, rng)
     else:
         t = m.texture("floor_tex").id
         w, h, adr = m.tex_width[t], m.tex_height[t], m.tex_adr[t]
@@ -80,6 +82,7 @@ def randomize(m, rng):
     q = np.zeros(4)
     mujoco.mju_mulQuat(q, m.cam_quat[cam].copy(), dq)
     m.cam_quat[cam] = q
+    return animate
 
 
 def movable_servos(gait):
@@ -92,10 +95,11 @@ def run_episode(seed, faults, gait=None, seconds=C.EPISODE_S, egomotion="gt", fl
     on_step(m, d, t) (optional) is called after each control step's physics, e.g. to render videos."""
     rng = np.random.default_rng([seed, 2])
     m = copy.deepcopy(base_model())
-    if randomize_scene:
-        randomize(m, rng)
+    animate = randomize(m, rng) if randomize_scene else None
     d = mujoco.MjData(m)
     mujoco.mj_resetDataKeyframe(m, d, 0)
+    if animate:
+        animate(d, 0.0)
     mujoco.mj_forward(m, d)
     gait = gait or Gait.random(rng)
     bank = bank or ServoBank(faults, np.random.default_rng([seed, 3]))   # own stream: same noise with or without faults
@@ -122,6 +126,8 @@ def run_episode(seed, faults, gait=None, seconds=C.EPISODE_S, egomotion="gt", fl
         cmd = controller.command(t) if controller is not None else gait.command(t)
         target = bank.step(cmd, t)
         d.ctrl[:] = np.radians(target)
+        if animate:
+            animate(d, t)
         for _ in range(C.N_SUBSTEPS):
             mujoco.mj_step(m, d)
         if on_step is not None:
