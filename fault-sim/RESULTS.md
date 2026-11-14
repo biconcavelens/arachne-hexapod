@@ -161,7 +161,7 @@ Caveats:
 Stages 3 and 4 walk identically to stages 0-2 on all 40 test seeds (checked), so only the image
 changes. From stage 5 the ground changes the walking, so those stages have their own no-recovery
 reference. Previews are in `runs/kaggle_v13/camera_view_stage{3,4,5,7}.png`, videos in
-`runs/kaggle_v13/runs/s*_videos/`.
+`runs/kaggle_v13/runs/s*_videos/` and `runs/kaggle_v14/runs/s6_videos/`.
 
 Same protocol as above: optical flow, 600 episodes, 120 held out.
 
@@ -171,6 +171,7 @@ Same protocol as above: optical flow, 600 episodes, 120 held out.
 | stage 3, clutter | 0.984 / 71% / 26% | 0.980 / 81% / 30% | 79% | 0.972 / 79% |
 | stage 4, + movers | 0.982 / 76% / 31% | 0.980 / 78% / 27% | 78% | 0.971 / 78% |
 | stage 5, hills | 0.957 / 62% / 24% | 0.959 / 66% / 23% | 62% | 0.825 / 51% |
+| stage 6, stones up to half a step | 0.957 / 67% / 24% | 0.952 / 62% / 21% | 62% | 0.787 / 44% |
 | stage 7, stones as tall as a step | 0.901 / 50% / 16% | 0.913 / 49% / 17% | 50% | 0.741 / 33% |
 
 Closed loop, camera-only model: 40 seeds, median speed relative to the same seed walking healthy.
@@ -181,6 +182,7 @@ Closed loop, camera-only model: 40 seeds, median speed relative to the same seed
 | stage 3 | 0.54 / 0.81 / 0.91 / 0.82 | 0.53 / 0.83 / 0.51 / 0.67 | 2.1 | 63% |
 | stage 4 | 0.54 / 0.81 / 0.91 / 0.82 | 0.73 / 0.65 / 0.65 / 0.65 | 3.6 | 51% |
 | stage 5 | 0.51 / 0.74 / 0.84 / 0.71 | 0.61 / 0.64 / 0.39 / 0.61 | 4.5 | 49% |
+| stage 6 | 0.52 / 0.68 / 0.83 / 0.67 | 0.45 / 0.64 / 0.56 / 0.58 | 6.0 | 57% |
 | stage 7 | (not meaningful, see below) | | 6.8 | 45% |
 
 Optical-flow ego-motion, correlation with the true body velocity (vx / vy / vz / wx / wy / wz):
@@ -189,6 +191,7 @@ Optical-flow ego-motion, correlation with the true body velocity (vx / vy / vz /
 - stage 3: 0.86 / 0.75 / 0.15 / 0.23 / 0.21 / 0.88
 - stage 4: 0.85 / 0.70 / 0.14 / 0.23 / 0.21 / 0.87
 - stage 5: 0.90 / 0.74 / 0.29 / 0.37 / 0.34 / 0.88
+- stage 6: 0.90 / 0.81 / 0.45 / 0.45 / 0.40 / 0.87
 - stage 7: 0.89 / 0.83 / 0.61 / 0.55 / 0.52 / 0.87
 
 What changed:
@@ -203,6 +206,10 @@ What changed:
   plane-trained model. The flow measures the body motion as well as on the plane or better, so the
   likely cause is the walking itself: slopes tilt and slow the body in ways that look like faults.
   This is untested.
+- **Stones up to half a step (stage 6) add little beyond the hills when trained there** (67% right
+  servo, against 62% on stage 5, within noise). The healthy robot still walks (median 37 mm/s, against
+  43 on the hills; none of 40 stall). But the plane-trained model falls further (44%) and false
+  alarms rise to 6 per minute.
 - **On stage 7 the gait, not the diagnoser, is the limit.** The healthy robot's median speed falls to
   12 mm/s (43 mm/s on stage 5), and 16 of 40 healthy runs move less than 5 mm/s. It does not fall;
   its feet catch on stones as tall as its step. Speed ratios against a stalled healthy run mean
