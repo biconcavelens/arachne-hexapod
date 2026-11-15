@@ -1,5 +1,9 @@
 # Running fault-sim on Kaggle
 
+**Quick path:** set `MODE` / `STAGES` in `kaggle_run.py`, then run `./kaggle_push.sh`. It stages the files
+below into a private dataset with a fresh STAMP, uploads it and pushes the kernel. The rest of this
+page explains what it does and the manual route.
+
 Yes, it fits. The tested way is `kaggle_run.py`, pushed as a script kernel; it runs every step
 and writes `results/status.txt`. A `gt` run (2000 episodes, training, closed loop, videos) takes about
 15 min on a T4. Rendering works with `MUJOCO_GL=egl`. Kaggle only registers Mesa's EGL (CPU, about

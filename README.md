@@ -11,6 +11,8 @@ was reprinted and the IMU was only just wired; every walking number below is sim
 
 | Path | What it is |
 | --- | --- |
+| `HANDOVER.md` | **Start here:** current state, setup on a new machine, next steps (2026-11-15) |
+| `fault-sim/` | Camera-based servo-fault detection in simulation, environment stages 0-7, Kaggle runs; results in `fault-sim/RESULTS.md` |
 | `vorpal-servo-wiring.md` | Channel map (confirmed on the robot), I2C pins of the Uno Q, status log |
 | `vorpal-mujoco/HANDOVER.md` | The engineering log: every decision, bug and number, newest last |
 | `vorpal-mujoco/build_neutral.py` | Builds the CAD-derived twin from the OnShape data and photos |
