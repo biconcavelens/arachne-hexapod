@@ -17,7 +17,7 @@ was reprinted and the IMU was only just wired; every walking number below is sim
 | `vorpal-mujoco/HANDOVER.md` | The engineering log: every decision, bug and number, newest last |
 | `vorpal-mujoco/build_neutral.py` | Builds the CAD-derived twin from the OnShape data and photos |
 | `vorpal-mujoco/gaits.py`, `sim_walk.py`, `build_physics.py` | Tripod gait with leg-clearance check; physics walk test |
-| `vorpal-mujoco/rl/` | MJX training environment, PPO, policy player, real-robot runner (WSL2 + GPU) |
+| `vorpal-mujoco/rl/` | MJX training environment, PPO, policy player, real-robot runner (Linux + GPU) |
 | `servo-web-control/` | The app on the board: sketch (servos + 200 Hz IMU), FastAPI endpoints, 3D twin web page |
 | `tools/` | AprilTag path tracker, 240 fps servo-horn tracker, IMU logger |
 | `fault-pilot/` | Simulation pilot: can a faulty servo be found from body motion? |
@@ -58,12 +58,13 @@ was reprinted and the IMU was only just wired; every walking number below is sim
 
 ## Running things
 
-- Simulation scripts run on Windows Python 3.13 with `mujoco`, `numpy`, `scipy`, `PIL`
+- Since the 2026-11 reinstall everything runs natively on Ubuntu (no Windows or WSL).
+- Simulation scripts run on Python 3.12 or 3.13 with `mujoco`, `numpy`, `scipy`, `PIL`
   (and `scikit-learn`, `joblib`, `matplotlib` for the pilot): for example
   `python vorpal-mujoco/gaits.py`, `python vorpal-mujoco/sim_walk.py steer=-0.15`,
   `python fault-pilot/pilot_observability.py`.
-- Training runs inside WSL2 Ubuntu with a GPU: see `vorpal-mujoco/rl/setup_wsl.sh` and
-  `wslrun.sh`, then `python train.py name=imu steps=40000000 envs=8192`.
+- Training runs on the GPU in its own venv: run `bash vorpal-mujoco/rl/setup_wsl.sh` once, then
+  `bash vorpal-mujoco/rl/wslrun.sh` followed by `python train.py name=imu steps=40000000 envs=8192`.
 - The app on the board is deployed with `adb push` to `~/ArduinoApps/servo-web-control`
   and started with `arduino-app-cli`; the exact steps, and the reboot/autostart quirks,
   are in `vorpal-mujoco/HANDOVER.md` and `vorpal-servo-wiring.md`.

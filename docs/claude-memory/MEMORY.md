@@ -3,5 +3,6 @@
 - [Robot safety defaults](feedback-robot-safety-defaults.md) — Send-to-robot off, don't kill user processes, Uno Q takeover steps
 - [Camera fault-detection idea](project-camera-fault-detection-idea.md) — professor meeting 2026-10-23; lit review + sim pilot done; CVPR 16 Nov too tight
 - [GitHub repo](reference-github-repo.md) — private biconcavelens/arachne-hexapod; what is excluded and why
-- [No local compute](feedback-no-local-compute.md) — fans broken: sim/training/rendering only on Kaggle, tiny checks locally
+- [Local compute OK](feedback-local-compute.md) — fans fixed 2026-11-17: heavy runs allowed locally (RTX 4060 8 GB, 14 GB RAM); Kaggle for long batches
+- [Ubuntu machine](user-machine-ubuntu.md) — native Ubuntu 26.04 since the 2026-11 reinstall; no Windows/WSL; uv, adb, kaggle not yet installed
 - [Kaggle pipeline](reference-kaggle-pipeline.md) — dataset + kernel names, kaggle_push.sh, STAMP check, piecewise downloads

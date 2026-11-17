@@ -8,7 +8,7 @@ metadata:
   modified: 2026-10-17T08:52:15.757Z
 ---
 
-The research project on Arachne is **Paper A** ("Walking on $3 servos" / "A $150 robot that models itself"): shake the robot ~60 s with the IMU logged, fit ~6 servo params per joint so the MuJoCo twin reproduces the IMU trace, retrain PPO (MJX) on the fitted twin, then walk with the servo model as "virtual encoders". Full plan, reviewer demands, baselines and status checklist live in `C:\projects\arachne\research-questions.md` ("The paper to write: Paper A").
+The research project on Arachne is **Paper A** ("Walking on $3 servos" / "A $150 robot that models itself"): shake the robot ~60 s with the IMU logged, fit ~6 servo params per joint so the MuJoCo twin reproduces the IMU trace, retrain PPO (MJX) on the fitted twin, then walk with the servo model as "virtual encoders". Full plan, reviewer demands, baselines and status checklist live in `research-questions.md` at the repo root ("The paper to write: Paper A").
 
 **Why:** the VLA idea (idea.md T1, RQ3/RQ4) moves to a different robot with the user's professor, because 2-DOF hobby-servo legs don't suit a VLA. Master's applications are irrelevant now; the goal is a top venue (primary CoRL 2027, stretch RSS 2027, backup ICRA 2028; 2027 dates are estimates, unverified).
 

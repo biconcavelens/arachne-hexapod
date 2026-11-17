@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# One-time setup of the RL environment inside WSL2 Ubuntu (GPU JAX + MJX + Playground).
-# Run from Windows:  wsl -d Ubuntu -- bash /mnt/c/projects/arachne/vorpal-mujoco/rl/setup_wsl.sh
+# One-time setup of the RL environment (GPU JAX + MJX + Playground) in ~/rl.
+# Runs on Linux with an NVIDIA GPU (originally WSL2 Ubuntu; now native Ubuntu). Needs uv.
+#   bash vorpal-mujoco/rl/setup_wsl.sh
 set -e
 export PATH="$HOME/.local/bin:$PATH"
 cd ~

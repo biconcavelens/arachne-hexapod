@@ -91,7 +91,8 @@ on the real robot has not been run.
    chrome --headless --no-pdf-header-footer --print-to-pdf=OUT.pdf fault-sim/runs/report/stages.html
    ```
    Build the HTML first with `python fault-sim/make_stages_report.py`. RL training uses its own
-   environment: `vorpal-mujoco/rl/setup_wsl.sh` (WSL2 or Linux with a GPU, uses `uv`).
+   environment: `vorpal-mujoco/rl/setup_wsl.sh` (runs natively on Ubuntu with a GPU, uses `uv`;
+   the name is from the old WSL2 setup).
 4. **Kaggle.**
    - Install the CLI with `pip install kaggle`.
    - Back up and restore your own API token, `~/.kaggle/kaggle.json`. It is not in the repo, and
@@ -106,10 +107,12 @@ on the real robot has not been run.
    `~/.claude/projects/<repo path with / replaced by ->/memory/`. Or ask it to read
    `docs/claude-memory/` and save them.
 
-## 4. Running fault-sim (laptop fans are broken: nothing heavy locally)
+## 4. Running fault-sim
 
-Everything heavy runs on Kaggle: simulation, rendering, data generation, training and videos.
-Locally, only compile XML, randomise a model without stepping, syntax checks, analysis and reports.
+Until 2026-11-15 the laptop's fans were broken, so everything heavy (simulation, rendering, data
+generation, training, videos) ran on Kaggle. The fans were fixed on 2026-11-17, so heavy runs may
+now be done locally too (RTX 4060 Laptop GPU, 8 GB; 14 GB RAM). Kaggle stays useful for long
+batches. The Kaggle workflow:
 
 1. Set `MODE` and `STAGES` at the top of `fault-sim/kaggle_run.py`:
 

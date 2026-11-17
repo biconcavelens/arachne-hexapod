@@ -16,4 +16,4 @@ Kaggle account trishanthmellimi. Private dataset `trishanthmellimi/arachne-hexap
 - Save each run to `fault-sim/runs/kaggle_vN` (gitignored; backed up as a GitHub release asset). Run log in `HANDOVER.md`.
 - One stage of MODE "stages" takes about 30 min.
 
-Related: [[feedback-no-local-compute]], [[project-camera-fault-detection-idea]].
+Related: [[feedback-local-compute]], [[project-camera-fault-detection-idea]].
