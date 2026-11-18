@@ -1,0 +1,74 @@
+{
+ "policy": "fault_v1",
+ "episodes": 3072,
+ "heldout_episodes": 615,
+ "ctx_s": 3,
+ "goal_idx": 190,
+ "detect_auroc": 0.8751631089675519,
+ "right_servo_pct": 58.923346147225885,
+ "right_kind_on_servo_pct": 37.95541912903781,
+ "correctable_vs_dead_pct": 65.5961328819783,
+ "walking_right_servo_pct": 76.77358687702434,
+ "walking_right_kind_on_servo_pct": 43.12332392992721,
+ "walking_correctable_vs_dead_pct": 70.12154773099293,
+ "walking_detect_auroc": 0.917703804872344,
+ "walking_right_servo_by_kind": {
+  "loss": 73.13228238519534,
+  "deadband": 33.182698515171076,
+  "sag": 88.05746782400479,
+  "frozen": 85.53388746803068,
+  "limp": 89.25881886642885
+ },
+ "right_servo_by_kind": {
+  "loss": 46.545695113883376,
+  "deadband": 27.654116673562267,
+  "sag": 62.51885369532428,
+  "frozen": 70.53659175784577,
+  "limp": 72.17507220617641
+ },
+ "right_servo_by_joint": {
+  "hip": 61.53352664938797,
+  "knee": 55.615181968972585
+ },
+ "kind_confusion": [
+  [
+   3296,
+   2468,
+   1239,
+   1794,
+   1784
+  ],
+  [
+   2509,
+   5729,
+   1160,
+   1264,
+   1423
+  ],
+  [
+   1474,
+   760,
+   1961,
+   2743,
+   2344
+  ],
+  [
+   1682,
+   1886,
+   2367,
+   4759,
+   4569
+  ],
+  [
+   2113,
+   1617,
+   2968,
+   5091,
+   10716
+  ]
+ ],
+ "false_alarms_per_min": 0.24088646218082543,
+ "detected_pct": 91.01796407185628,
+ "median_delay_s": 2.175,
+ "threshold": 0.9528549909591675
+}

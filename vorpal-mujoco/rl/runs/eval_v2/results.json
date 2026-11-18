@@ -1,0 +1,281 @@
+{
+ "fault_v2": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91271054993072,
+   "t_goal_s": 7.4,
+   "cross_track_mm": 3.155766725540161
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91638138890266,
+   "t_goal_s": 7.875,
+   "cross_track_mm": 3.4180898666381836
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91356066117685,
+   "t_goal_s": 8.25,
+   "cross_track_mm": 3.606344223022461
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91179183125496,
+   "t_goal_s": 7.75,
+   "cross_track_mm": 3.266767740249634
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91241792837779,
+   "t_goal_s": 7.550000000000001,
+   "cross_track_mm": 3.2649693489074707
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.92270314445098,
+   "t_goal_s": 7.9,
+   "cross_track_mm": 3.241222858428955
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.92072017242512,
+   "t_goal_s": 8.1,
+   "cross_track_mm": 3.486435890197754
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.93099781374137,
+   "t_goal_s": 7.95,
+   "cross_track_mm": 3.3742151260375977
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91446131219467,
+   "t_goal_s": 8.275,
+   "cross_track_mm": 3.6167221069335938
+  },
+  "limp (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.93366946776709,
+   "t_goal_s": 8.025,
+   "cross_track_mm": 3.387793779373169
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9480402097106,
+   "t_goal_s": 8.75,
+   "cross_track_mm": 3.804569959640503
+  },
+  "2 dead (any)": {
+   "goal_pct": 92.96875,
+   "fell_pct": 0.0,
+   "path_pct": 95.94348000052074,
+   "t_goal_s": 9.35,
+   "cross_track_mm": 4.267376899719238
+  },
+  "3 dead (any)": {
+   "goal_pct": 88.28125,
+   "fell_pct": 0.0,
+   "path_pct": 95.3656478629758,
+   "t_goal_s": 10.5,
+   "cross_track_mm": 4.906436920166016
+  }
+ },
+ "fault_v1": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.95595334718625,
+   "t_goal_s": 7.8500000000000005,
+   "cross_track_mm": 2.914522409439087
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.95455586661895,
+   "t_goal_s": 8.325,
+   "cross_track_mm": 3.29508638381958
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.95873024066289,
+   "t_goal_s": 9.0,
+   "cross_track_mm": 3.6510047912597656
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.95626142869394,
+   "t_goal_s": 8.200000000000001,
+   "cross_track_mm": 3.1778769493103027
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9514742443959,
+   "t_goal_s": 8.025,
+   "cross_track_mm": 3.143705368041992
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9564169595639,
+   "t_goal_s": 8.35,
+   "cross_track_mm": 3.262225389480591
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.95845500379801,
+   "t_goal_s": 8.675,
+   "cross_track_mm": 3.568053722381592
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96432879318793,
+   "t_goal_s": 8.4,
+   "cross_track_mm": 3.328674793243408
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9636018027862,
+   "t_goal_s": 9.15,
+   "cross_track_mm": 3.6949551105499268
+  },
+  "limp (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9482735991478,
+   "t_goal_s": 8.625,
+   "cross_track_mm": 3.434544801712036
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96300935745239,
+   "t_goal_s": 9.875,
+   "cross_track_mm": 4.5265913009643555
+  },
+  "2 dead (any)": {
+   "goal_pct": 92.1875,
+   "fell_pct": 0.0,
+   "path_pct": 96.08365853006642,
+   "t_goal_s": 10.175,
+   "cross_track_mm": 4.820887088775635
+  },
+  "3 dead (any)": {
+   "goal_pct": 78.125,
+   "fell_pct": 0.0,
+   "path_pct": 92.68120840812723,
+   "t_goal_s": 11.675,
+   "cross_track_mm": 6.527551651000977
+  }
+ },
+ "healthy_v1": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98796427001555,
+   "t_goal_s": 6.7,
+   "cross_track_mm": 2.856609344482422
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98341985046864,
+   "t_goal_s": 7.300000000000001,
+   "cross_track_mm": 3.3178114891052246
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98390258600314,
+   "t_goal_s": 7.4,
+   "cross_track_mm": 3.697122097015381
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98249945541222,
+   "t_goal_s": 6.9,
+   "cross_track_mm": 2.9695353507995605
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98487451424201,
+   "t_goal_s": 6.7,
+   "cross_track_mm": 2.9066262245178223
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9749378611644,
+   "t_goal_s": 7.2,
+   "cross_track_mm": 3.096811294555664
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9731995165348,
+   "t_goal_s": 7.4,
+   "cross_track_mm": 3.7825119495391846
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.97567341973385,
+   "t_goal_s": 7.325000000000001,
+   "cross_track_mm": 3.4366941452026367
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.97039542843899,
+   "t_goal_s": 7.7,
+   "cross_track_mm": 4.222848892211914
+  },
+  "limp (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.97478884955247,
+   "t_goal_s": 7.45,
+   "cross_track_mm": 3.421887159347534
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.89007345090309,
+   "t_goal_s": 8.95,
+   "cross_track_mm": 4.9802069664001465
+  },
+  "2 dead (any)": {
+   "goal_pct": 89.84375,
+   "fell_pct": 0.0,
+   "path_pct": 94.85031299603482,
+   "t_goal_s": 8.700000000000001,
+   "cross_track_mm": 5.422935485839844
+  },
+  "3 dead (any)": {
+   "goal_pct": 84.375,
+   "fell_pct": 0.0,
+   "path_pct": 94.06838046076396,
+   "t_goal_s": 10.075000000000001,
+   "cross_track_mm": 7.191442012786865
+  }
+ }
+}

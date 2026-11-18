@@ -1,0 +1,213 @@
+<title>Arachne Fault-Tolerant Walking</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~68ch) with figures that may widen to 880px; results as numbered findings because they are a sequence of claims. */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --fg: #15181d;
+  --fg2: #4b5260;
+  --rule: #dde1e7;
+  --accent: #2a78d6;      /* trained with faults (same blue as the charts) */
+  --accent2: #eb6834;     /* trained healthy only */
+  --note-bg: #eef3fb;
+  --warn-bg: #fbf3ea;
+  --plate: #ffffff;       /* charts are drawn on white; keep a white plate in dark mode */
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151a; --surface: #1a1e25; --fg: #e9ecf1; --fg2: #a8b0bd; --rule: #2c323c;
+    --accent: #5a9cec; --accent2: #f08456; --note-bg: #17243a; --warn-bg: #2b2117; --plate: #f4f5f7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151a; --surface: #1a1e25; --fg: #e9ecf1; --fg2: #a8b0bd; --rule: #2c323c;
+  --accent: #5a9cec; --accent2: #f08456; --note-bg: #17243a; --warn-bg: #2b2117; --plate: #f4f5f7;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 15.5px/1.6 var(--sans); }
+.wrap { max-width: 880px; margin: 0 auto; padding-block: 40px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.prose { max-width: 68ch; }
+header { display: grid; gap: 6px; padding-bottom: 24px; border-bottom: 1px solid var(--rule); margin-bottom: 28px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fg2); }
+h1 { font: 600 30px/1.2 var(--sans); margin: 0; text-wrap: balance; }
+h2 { font: 600 21px/1.3 var(--sans); margin: 44px 0 10px; text-wrap: balance; }
+h3 { font: 600 16px/1.4 var(--sans); margin: 24px 0 6px; }
+p { margin: 0 0 12px; }
+.sub { color: var(--fg2); margin: 0; }
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin-bottom: 6px; }
+code, .num { font-family: var(--mono); font-size: .92em; font-variant-numeric: tabular-nums; }
+.summary { background: var(--note-bg); border-radius: 8px; padding: 18px 22px; display: grid; gap: 4px; }
+.summary h2 { margin: 0 0 6px; font-size: 17px; }
+.summary ol { margin: 0; }
+.caveat { background: var(--warn-bg); border-radius: 8px; padding: 16px 22px; }
+.caveat h3 { margin-top: 0; }
+figure { margin: 18px 0 22px; display: grid; gap: 8px; }
+figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.plate { background: var(--plate); padding: 10px; border-radius: 8px; border: 1px solid var(--rule); }
+figcaption { color: var(--fg2); font-size: 13.5px; line-height: 1.5; max-width: 76ch; }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.pair > figure { margin: 0; min-width: 0; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+.dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.tablebox { overflow-x: auto; margin: 14px 0 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 8px 12px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font-weight: 600; color: var(--fg2); font-size: 12.5px; border-bottom: 1px solid var(--rule); }
+tbody tr + tr td { border-top: 1px solid var(--rule); }
+td.best { font-weight: 600; color: var(--fg); }
+.k { color: var(--fg2); }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--fg2); font-size: 13px; }
+a { color: var(--accent); }
+@media (max-width: 520px) { h1 { font-size: 24px; } body { font-size: 15px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Arachne hexapod · simulation results · 18 Nov 2026</div>
+  <h1>Following a path with dead servos, and saying which servo failed</h1>
+  <p class="sub">MuJoCo (MJX) simulation of the 12-servo Arachne hexapod. One reinforcement-learning policy, trained once, follows a given path to a goal while servos fail mid-walk. A separate network reads the same sensor history (IMU only, no joint sensing) and names the failed servo.</p>
+</header>
+
+<section class="summary">
+  <h2>Summary</h2>
+  <ol>
+    <li>With <b>three servos dead</b> mid-walk, the policy trained with faults reaches the goal in <b>87.7%</b> of 512 test runs, against <b>80.7%</b> for the same policy trained without faults, and gets there 1.8 s sooner (median). It never fell over.</li>
+    <li>With <b>one</b> faulty servo of any kind, both policies reach the goal every time. A six-legged robot with one bad servo still has a stable gait, so single faults are not where the challenge is on flat ground.</li>
+    <li>From 3 s of IMU and command history, the diagnosis network detects <b>85%</b> of faults (median 2.6 s after onset, 0.22 false alarms per minute) and names the faulty servo <b>63%</b> of the time (chance: 8%). It is good on dead and stuck servos and weak on deadband and on telling fault kinds apart.</li>
+    <li>The better the policy compensates, the harder the fault is to see: the same diagnosis method named the right servo 77% of the time on the earlier policy and 63% on the fault-trained one. This trade-off is an argument for training diagnosis and control together, the planned next step.</li>
+  </ol>
+</section>
+
+<h2>Setup</h2>
+<div class="prose">
+<p><b>Robot and simulator.</b> Arachne: six legs, a hip and a knee servo per leg (12 MG90S position servos), an MPU-6050 IMU, no joint-angle sensing. Simulated in MuJoCo MJX on a laptop GPU (RTX 4060), 8,192 parallel environments, 20 Hz control.</p>
+<p><b>Task.</b> Each episode draws a random path (20 cm pieces, straight or curved down to a 33 cm radius) and a goal 1.0–1.9 m along it. The policy sees the next path points in its own body frame, its distance off the path and the distance left. Episodes last 20 s.</p>
+<p><b>Faults.</b> 0–3 servos per episode fail between 0.5 and 8 s, chosen at random. Five kinds:</p>
+</div>
+<div class="tablebox"><table>
+  <thead><tr><th>Kind</th><th style="text-align:left">What the servo does</th><th style="text-align:left">Class</th></tr></thead>
+  <tbody>
+    <tr><td>loss</td><td style="text-align:left">reaches only 50–95% of the commanded movement</td><td style="text-align:left">correctable</td></tr>
+    <tr><td>deadband</td><td style="text-align:left">ignores command changes under 10–20°</td><td style="text-align:left">correctable</td></tr>
+    <tr><td>sag</td><td style="text-align:left">droops 2–5° under load</td><td style="text-align:left">correctable</td></tr>
+    <tr><td>frozen</td><td style="text-align:left">stuck at its last position</td><td style="text-align:left">dead</td></tr>
+    <tr><td>limp</td><td style="text-align:left">no torque, the joint swings freely</td><td style="text-align:left">dead</td></tr>
+  </tbody>
+</table></div>
+<div class="prose">
+<p><b>Policies compared.</b> <span class="tag"><span class="dot" style="background:var(--accent)"></span>trained with faults</span> (63M steps) and <span class="tag"><span class="dot" style="background:var(--accent2)"></span>trained healthy only</span> (31M steps) on the same task, network and reward. Both use only what the real robot has: one second of IMU readings, the last commands sent to the servos, and the path features. The critic sees the true fault labels during training only.</p>
+<p><b>Test.</b> 512 fixed test cases per scenario, the same paths and start poses for every policy. The goal is 1.5 m along the path. The first fault starts at 1 s; extra faults follow 2 s apart. "Dead" means frozen or limp, on different legs.</p>
+</div>
+
+<h2>1. Reaching the goal through faults</h2>
+<figure>
+  <div class="plate"><img src="img/goal_by_scenario.png" alt="Bar chart: goal reached within 20 s. No fault and one faulty servo: 100% for both policies. Two dead servos: 98% trained with faults, 96% trained healthy. Three dead servos: 88% versus 81%."></div>
+  <figcaption>Share of 512 runs that reach the goal within 20 s. "1 faulty servo" averages ten scenarios: each fault kind on a hip and on a knee. At 512 runs, one standard error is about 1.7 points at 80%.</figcaption>
+</figure>
+<figure>
+  <div class="plate"><img src="img/time_by_scenario.png" alt="Bar chart: median time to goal. Trained with faults is faster in every scenario: 7.5 versus 8.0 s with no fault, 8.0 versus 8.8 s with one fault, 9.4 versus 11.0 s with two dead, 10.7 versus 12.5 s with three dead."></div>
+  <figcaption>Median time to reach the goal, over runs that reached it. The fault-trained policy is also faster when nothing is wrong.</figcaption>
+</figure>
+
+<div class="tablebox"><table>
+  <thead><tr><th>Scenario</th><th>With faults<br>goal · time</th><th>Healthy only<br>goal · time</th><th class="k">Earlier v1, with faults</th><th class="k">Earlier v1, healthy</th></tr></thead>
+  <tbody>
+    <tr><td>No fault</td><td>100% · 7.5 s</td><td>100% · 8.0 s</td><td class="k">100%</td><td class="k">100%</td></tr>
+    <tr><td>Limp knee (worst single fault)</td><td>100% · 8.7 s</td><td>100% · 10.0 s</td><td class="k">100%</td><td class="k">100%</td></tr>
+    <tr><td>Frozen knee</td><td>100% · 8.3 s</td><td>100% · 8.9 s</td><td class="k">100%</td><td class="k">100%</td></tr>
+    <tr><td>2 dead servos</td><td class="best">98.0% · 9.4 s</td><td>96.1% · 11.0 s</td><td class="k">96.3%</td><td class="k">93.9%</td></tr>
+    <tr><td>3 dead servos</td><td class="best">87.7% · 10.7 s</td><td>80.7% · 12.5 s</td><td class="k">81.8%</td><td class="k">78.7%</td></tr>
+  </tbody>
+</table></div>
+<div class="prose">
+<p>No policy fell in any scenario except one run of the earlier v1 policy (0.4%). Failures are runs that time out at about 93–95% of the path. Cross-track error stays at 3–6 mm throughout. The v1 policies were trained on a shorter-goal version of the task (see "What changed today").</p>
+</div>
+
+<h2>2. Three dead servos, side by side</h2>
+<figure>
+  <div class="plate"><img src="img/progress_3dead.png" alt="Line chart of distance to goal over 20 seconds for 16 test runs per policy with three servos dying at 1, 3 and 5 s. The fault-trained median reaches zero at about 11 s, the healthy-trained median at about 12.5 s; one healthy-trained run stalls at 82 cm."></div>
+  <figcaption>Distance still to go, 16 of the test runs (thin) and their median (thick). Dashed lines: the first, second and third servo die. One healthy-trained run stops 82 cm short and never recovers.</figcaption>
+</figure>
+<div class="pair">
+  <figure>
+    <img src="img/fault_v2_3dead.gif" alt="Animation: fault-trained robot walking the path with knee 1 limp, hip 3 frozen and knee 5 limp; the dead legs turn red.">
+    <figcaption><span class="tag"><span class="dot" style="background:var(--accent)"></span>Trained with faults.</span> Knee 1 limp (1 s), hip 3 frozen (3 s), knee 5 limp (5 s). Legs turn red when their servo dies. Bottom bar: live diagnosis.</figcaption>
+  </figure>
+  <figure>
+    <img src="img/healthy_v2_3dead.gif" alt="Animation: healthy-trained robot on the same path with the same three dead servos, moving more slowly.">
+    <figcaption><span class="tag"><span class="dot" style="background:var(--accent2)"></span>Trained healthy only.</span> Same path, same faults. At 7.5 s it is 76 cm from the goal; the fault-trained robot is at 65 cm.</figcaption>
+  </figure>
+</div>
+
+<h2>3. Saying which servo failed</h2>
+<div class="prose">
+<p>A separate network (an MLP on 3 s of the policy's own input) outputs, for each of the 12 servos, healthy or one of the five fault kinds. It was trained on 2,457 episodes of the fault-trained policy with random faults and tested on 615 held-out episodes. Servo and kind scores are for windows with exactly one faulty servo, at least 1 s after the fault started, while the robot is still walking.</p>
+</div>
+<div class="tablebox"><table>
+  <thead><tr><th>Measure</th><th>Fault-trained policy</th><th class="k">Earlier v1 policy</th></tr></thead>
+  <tbody>
+    <tr><td>Faults detected (alarm = 3 steps above the 99.5th healthy percentile)</td><td>85%</td><td class="k">91%</td></tr>
+    <tr><td>Median time from fault to alarm</td><td>2.6 s</td><td class="k">2.2 s</td></tr>
+    <tr><td>False alarms on healthy walking</td><td>0.22 / min</td><td class="k">0.24 / min</td></tr>
+    <tr><td>Detection AUROC, while walking</td><td>0.86</td><td class="k">0.92</td></tr>
+    <tr><td>Faulty servo named correctly (chance 8%)</td><td class="best">63%</td><td class="k">77%</td></tr>
+    <tr><td>Fault kind right, given that servo</td><td>41%</td><td class="k">43%</td></tr>
+    <tr><td>Correctable vs dead right</td><td>66%</td><td class="k">70%</td></tr>
+  </tbody>
+</table></div>
+<div class="pair">
+  <figure>
+    <div class="plate"><img src="img/diag_by_kind.png" alt="Bar chart: faulty servo named correctly by fault kind: loss 51%, deadband 30%, sag 76%, frozen 69%, limp 76%; chance 8%."></div>
+    <figcaption>Faulty servo named correctly, by fault kind (fault-trained policy, while walking). Dead and drooping servos are found; deadband barely moves the body and is hard to see.</figcaption>
+  </figure>
+  <figure>
+    <img src="img/fault_v2_frozen_hip4.gif" alt="Animation: robot with hip 4 frozen; the diagnosis bar names hip 4 but calls it limp.">
+    <figcaption>Hip 4 frozen at 1 s. The diagnosis finds hip 4 within about 2 s but calls it limp, the typical mistake: it locates the fault better than it classifies it.</figcaption>
+  </figure>
+</div>
+<div class="prose">
+<p>A longer history mattered most: with the policy's own 1 s window, the earlier policy's servo accuracy was 43%; with 3 s it was 77%. The drop from 77% to 63% on the fault-trained policy is consistent with that policy hiding faults better, though its test data also has more two- and three-fault episodes, which may account for part of the drop.</p>
+</div>
+
+<h2>What changed today</h2>
+<div class="prose">
+<ul>
+  <li><b>First test was not valid.</b> The first policies (v1) had goals 0.4–0.8 m away and walked about 0.2 m/s, so they arrived in about 3 s, before most faults started. The task now uses 1.0–1.9 m goals, faults that start mid-walk, and up to three faulty servos (v2).</li>
+  <li><b>Diagnosis history 1 s → 3 s.</b> Servo accuracy on the v1 policy went from 43% to 77% while walking.</li>
+  <li><b>Lost runs.</b> The laptop ran out of RAM twice (14 GB, with a browser open), killing two training runs. Jobs now run one at a time as separate system services with memory caps.</li>
+</ul>
+</div>
+
+<section class="caveat">
+  <h3>Limits of these results</h3>
+  <ul>
+    <li>Simulation only, flat ground, idealised position servos. Nothing here has been run on the real robot.</li>
+    <li>The diagnosis network is trained after the policy and does not feed back into it. The policy adapts on its own, from the same sensor history; it does not act on an explicit "servo X is dead" signal yet.</li>
+    <li>The 20 s limit makes "goal reached" partly a speed measure. On flat ground, faults slow the robot more than they topple it.</li>
+    <li>One training seed per policy. The 7-point gap at three dead servos is about three standard errors over 512 paired runs, but it has not been checked across seeds.</li>
+    <li>The simulated walking speed (about 0.2 m/s) is probably faster than the real MG90S robot can manage.</li>
+  </ul>
+</section>
+
+<h2>Next steps</h2>
+<div class="prose">
+<ol>
+  <li>Train diagnosis together with the policy (teacher–student, with a diagnosis head on the student), so the policy can use what the diagnosis knows.</li>
+  <li>Rough terrain and slopes, where a dead leg should matter far more than on flat ground.</li>
+  <li>Repeat the comparison over 3 seeds and add a "told which servo is dead" upper bound.</li>
+  <li>Demo: a top-down camera, a path drawn by hand on the laptop, and a panel that disables servos live.</li>
+</ol>
+</div>
+
+<footer>
+  Code: <code>vorpal-mujoco/rl/</code> (<code>fault_path_env.py</code>, <code>train_fault.py</code>, <code>eval_fault.py</code>, <code>diagnose.py</code>). Policies <code>fault_v2</code>, <code>healthy_v2</code>; evaluation <code>runs/eval_final</code>; diagnosis <code>runs/diag_v2_ctx3</code>.
+</footer>
+</div>

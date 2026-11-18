@@ -1,8 +1,10 @@
-- [Paper A direction](project-paper-a-servo-identification.md) — Arachne = sealed-servo identification from IMU; VLA not on Arachne (2026-10-17)
+- [Fault-tolerant path following](project-fault-tolerant-path-following.md) — THE direction since 2026-11-17: merged paper, RL path following with in-policy fault diagnosis; plan in PLAN.md
+- [Paper A direction](project-paper-a-servo-identification.md) — (superseded 2026-11-17, merged) Arachne = sealed-servo identification from IMU; VLA not on Arachne (2026-10-17)
 - [Hardware choices are final](feedback-respect-hardware-choices.md) — don't re-argue IMU/power/feet/declined parts
 - [Robot safety defaults](feedback-robot-safety-defaults.md) — Send-to-robot off, don't kill user processes, Uno Q takeover steps
-- [Camera fault-detection idea](project-camera-fault-detection-idea.md) — professor meeting 2026-10-23; lit review + sim pilot done; CVPR 16 Nov too tight
+- [Camera fault-detection idea](project-camera-fault-detection-idea.md) — (superseded 2026-11-17, merged) professor meeting 2026-10-23; lit review + sim pilot done; CVPR 16 Nov too tight
 - [GitHub repo](reference-github-repo.md) — private biconcavelens/arachne-hexapod; what is excluded and why
 - [Local compute OK](feedback-local-compute.md) — fans fixed 2026-11-17: heavy runs allowed locally (RTX 4060 8 GB, 14 GB RAM); Kaggle for long batches
 - [Ubuntu machine](user-machine-ubuntu.md) — native Ubuntu 26.04 since the 2026-11 reinstall; no Windows/WSL; uv, adb, kaggle not yet installed
 - [Kaggle pipeline](reference-kaggle-pipeline.md) — dataset + kernel names, kaggle_push.sh, STAMP check, piecewise downloads
+- [Long jobs via systemd-run](feedback-long-jobs-systemd.md) — nohup jobs die with the app; OOM at 14 GB killed everything 2026-11-18

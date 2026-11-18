@@ -1,0 +1,174 @@
+{
+ "fault_v1": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96449506204378,
+   "t_goal_s": 9.850000000000001,
+   "cross_track_mm": 3.4700286388397217
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96708796212546,
+   "t_goal_s": 10.725000000000001,
+   "cross_track_mm": 3.9551315307617188
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96363010845685,
+   "t_goal_s": 11.475000000000001,
+   "cross_track_mm": 4.451101779937744
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96763004088088,
+   "t_goal_s": 10.200000000000001,
+   "cross_track_mm": 3.7839269638061523
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96742666944075,
+   "t_goal_s": 10.025,
+   "cross_track_mm": 3.70493221282959
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96828211373403,
+   "t_goal_s": 10.55,
+   "cross_track_mm": 3.8046345710754395
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.97059380341517,
+   "t_goal_s": 10.850000000000001,
+   "cross_track_mm": 4.11768913269043
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96723202302266,
+   "t_goal_s": 10.525,
+   "cross_track_mm": 3.8361220359802246
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96817133536464,
+   "t_goal_s": 11.475000000000001,
+   "cross_track_mm": 4.489012718200684
+  },
+  "limp (hip)": {
+   "goal_pct": 98.4375,
+   "fell_pct": 0.0,
+   "path_pct": 99.88928478407232,
+   "t_goal_s": 10.75,
+   "cross_track_mm": 3.8879785537719727
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96290823542758,
+   "t_goal_s": 12.5,
+   "cross_track_mm": 5.195375442504883
+  },
+  "2 dead (any)": {
+   "goal_pct": 88.28125,
+   "fell_pct": 0.0,
+   "path_pct": 94.29242613872415,
+   "t_goal_s": 12.9,
+   "cross_track_mm": 5.833610534667969
+  }
+ },
+ "healthy_v1": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9892131964627,
+   "t_goal_s": 8.3,
+   "cross_track_mm": 3.289320468902588
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98162061368163,
+   "t_goal_s": 8.950000000000001,
+   "cross_track_mm": 3.823214292526245
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9838888743206,
+   "t_goal_s": 9.275,
+   "cross_track_mm": 4.237306594848633
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98646976524277,
+   "t_goal_s": 8.6,
+   "cross_track_mm": 3.442281723022461
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98726212468586,
+   "t_goal_s": 8.35,
+   "cross_track_mm": 3.3803868293762207
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9814724843753,
+   "t_goal_s": 8.875,
+   "cross_track_mm": 3.6047701835632324
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.97304827955207,
+   "t_goal_s": 9.3,
+   "cross_track_mm": 4.279396057128906
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.9789849217785,
+   "t_goal_s": 9.025,
+   "cross_track_mm": 3.964653253555298
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.96752034088497,
+   "t_goal_s": 9.475000000000001,
+   "cross_track_mm": 4.7089433670043945
+  },
+  "limp (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.98146704349078,
+   "t_goal_s": 9.200000000000001,
+   "cross_track_mm": 3.996990203857422
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.90361445632419,
+   "t_goal_s": 11.375,
+   "cross_track_mm": 5.91474723815918
+  },
+  "2 dead (any)": {
+   "goal_pct": 87.5,
+   "fell_pct": 0.0,
+   "path_pct": 94.02192349692709,
+   "t_goal_s": 11.025000000000002,
+   "cross_track_mm": 6.151554107666016
+  }
+ }
+}

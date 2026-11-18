@@ -1,0 +1,10 @@
+[    54s] step           0  reward    2.67  len  400  mean speed err   133 mm/s  lin 0.043  air -14.39
+[   139s] step     327,680  reward    3.04  len  400  mean speed err   132 mm/s  lin 0.043  air -11.43
+[   218s] step     655,360  reward    3.57  len  400  mean speed err   132 mm/s  lin 0.044  air  -7.62
+[   276s] step     983,040  reward    4.14  len  400  mean speed err   131 mm/s  lin 0.045  air  -4.05
+[   335s] step   1,310,720  reward    4.79  len  400  mean speed err   128 mm/s  lin 0.045  air   0.74
+[   393s] step   1,638,400  reward    5.44  len  400  mean speed err   127 mm/s  lin 0.046  air   5.59
+[   452s] step   1,966,080  reward    6.27  len  400  mean speed err   124 mm/s  lin 0.049  air  11.48
+[   510s] step   2,293,760  reward    7.06  len  400  mean speed err   121 mm/s  lin 0.050  air  17.38
+[   568s] step   2,621,440  reward    8.12  len  400  mean speed err   119 mm/s  lin 0.054  air  24.86
+[   626s] step   2,949,120  reward    9.11  len  400  mean speed err   116 mm/s  lin 0.055  air  29.74

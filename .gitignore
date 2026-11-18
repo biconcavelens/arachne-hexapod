@@ -19,6 +19,8 @@ s44182-025-00031-6.pdf
 # Large or regenerable outputs
 *.gif
 **/runs/**/params.pkl
+**/runs/**/diag_params.pkl
+vorpal-mujoco/rl/runs_*.out
 **/runs/**/real_mock_*.csv
 
 # fault-sim outputs (regenerate with build_scene.py / generate.py / train.py)

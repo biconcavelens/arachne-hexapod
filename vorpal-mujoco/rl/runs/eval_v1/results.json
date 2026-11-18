@@ -1,0 +1,174 @@
+{
+ "fault_v1": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.90448860500875,
+   "t_goal_s": 3.45,
+   "cross_track_mm": 1.811683177947998
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.89879240875614,
+   "t_goal_s": 3.5,
+   "cross_track_mm": 1.9444507360458374
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.89904225278947,
+   "t_goal_s": 3.5,
+   "cross_track_mm": 1.9088187217712402
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.90046835560133,
+   "t_goal_s": 3.45,
+   "cross_track_mm": 1.816404104232788
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.89340718901128,
+   "t_goal_s": 3.4250000000000003,
+   "cross_track_mm": 1.9399492740631104
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.89138096704178,
+   "t_goal_s": 3.4000000000000004,
+   "cross_track_mm": 1.8041728734970093
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.87923094194244,
+   "t_goal_s": 3.5500000000000003,
+   "cross_track_mm": 2.084988594055176
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.90429591959301,
+   "t_goal_s": 3.5,
+   "cross_track_mm": 1.8817613124847412
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.89298259156133,
+   "t_goal_s": 3.5,
+   "cross_track_mm": 2.170651435852051
+  },
+  "limp (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.90205413485381,
+   "t_goal_s": 3.45,
+   "cross_track_mm": 1.9053980112075806
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.88876503320796,
+   "t_goal_s": 3.45,
+   "cross_track_mm": 2.2631540298461914
+  },
+  "2 dead (any)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.85896479881096,
+   "t_goal_s": 3.475,
+   "cross_track_mm": 2.1171464920043945
+  }
+ },
+ "healthy_v1": {
+  "healthy (-)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.94302783691722,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.8763654232025146
+  },
+  "loss (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.923575512303,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.981492280960083
+  },
+  "loss (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.94709965730033,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.939803123474121
+  },
+  "deadband (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.93492350032085,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.9006271362304688
+  },
+  "deadband (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.93956246137763,
+   "t_goal_s": 3.0,
+   "cross_track_mm": 1.8611944913864136
+  },
+  "sag (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.92663337314096,
+   "t_goal_s": 3.0,
+   "cross_track_mm": 1.9068152904510498
+  },
+  "sag (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.91677218423168,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.9742965698242188
+  },
+  "frozen (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.92471901729844,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.9249430894851685
+  },
+  "frozen (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.92089424375365,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 2.018162250518799
+  },
+  "limp (hip)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.93417023971736,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 1.9804494380950928
+  },
+  "limp (knee)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.88850401475095,
+   "t_goal_s": 2.975,
+   "cross_track_mm": 2.308034896850586
+  },
+  "2 dead (any)": {
+   "goal_pct": 100.0,
+   "fell_pct": 0.0,
+   "path_pct": 99.85683236369057,
+   "t_goal_s": 2.95,
+   "cross_track_mm": 2.167659282684326
+  }
+ }
+}
