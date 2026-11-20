@@ -1,0 +1,1 @@
+[    80s] step           0  reward    4.42  len  316  path   6.7 cm(avg)  xtrack  55.4 mm  heading  51.8 deg  at_goal   0.0%  faulty   74%  SUCCESS   0.0%  bumped  4.7%

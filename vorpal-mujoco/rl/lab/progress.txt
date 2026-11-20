@@ -4,3 +4,27 @@
   - train_fault.py: the training log prints the mean heading error; snapshots kept at ~25/50/75% in runs/<name>/ckpt/.
   - lab/push_results.sh: adds each file pattern separately (one unmatched pattern made git add skip everything).
   - Camera 120x80 (user's choice), CUDA_VISIBLE_DEVICES pinned to the RTX 6000 Ada (the machine also has an A400).
+[2026-11-20 16:08:52] run_all: camera 120x80, 4096 envs, 40000000 steps, GPU: NVIDIA RTX 6000 Ada Generation, 49140 MiB
+NVIDIA RTX A400, 4094 MiB
+[2026-11-20 16:08:52] start preflight
+[2026-11-20 16:10:48] end preflight: exit 1 after 1 min
+external/xla+/xla/backends/autotuner/autotuner.cc:242
+
+Traceback (most recent call last):
+  File "/home/kavinder/trishanth-hexapod/vorpal-mujoco/rl/train_fault.py", line 96, in <module>
+    make_policy, params, _ = ppo.train(
+                             ^^^^^^^^^^
+  File "/home/kavinder/rl/lib/python3.12/site-packages/brax/training/agents/ppo/train.py", line 814, in train
+    training_epoch_with_timing(training_state, env_state, epoch_keys)
+  File "/home/kavinder/rl/lib/python3.12/site-packages/brax/training/agents/ppo/train.py", line 685, in training_epoch_with_timing
+    result = training_epoch(training_state, env_state, key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavinder/rl/lib/python3.12/site-packages/jax/_src/pmap.py", line 319, in wrapped
+    out = jitted_f(*dyn_args_flat)
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: NOT_FOUND: All configs failed during profiling or were excluded from selection.
+Failures (2):
+EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
+EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
