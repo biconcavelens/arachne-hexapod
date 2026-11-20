@@ -1,0 +1,21 @@
+{
+ "policy": "terr_both",
+ "scene": "terrain",
+ "sensors": "both",
+ "episodes": 1536,
+ "heldout": 308,
+ "detect_auroc": 0.587331091667679,
+ "right_servo_pct": 15.69054441260745,
+ "all_found_1_pct": 15.69054441260745,
+ "all_found_2_pct": 4.717540944694991,
+ "all_found_3_pct": 0.8891358710752986,
+ "right_servo_by_kind": {
+  "dead": 19.163662581110312,
+  "stuck": 17.412013760254037,
+  "signal loss": 2.0226055919095773,
+  "worn gears": 4.623824451410658
+ },
+ "false_alarms_per_min": 0.30807410893842796,
+ "detected_pct": 4.980842911877394,
+ "median_delay_s": 12.9
+}

@@ -1,0 +1,304 @@
+<title>Arachne Four-Stage Results</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~68ch); videos, the chart and tables widen to 960px. Same look as the 18 Nov report so the two read as a series. */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --fg: #15181d;
+  --fg2: #4b5260;
+  --rule: #dde1e7;
+  --s1: #2a78d6;          /* IMU + camera */
+  --s2: #eb6834;          /* IMU only */
+  --s3: #1baf7a;          /* camera only */
+  --note-bg: #eef3fb;
+  --warn-bg: #fbf3ea;
+  --good: #0a7d0a;
+  --bad: #c03434;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151a; --surface: #1a1e25; --fg: #e9ecf1; --fg2: #a8b0bd; --rule: #2c323c;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --note-bg: #17243a; --warn-bg: #2b2117; --good: #4cc04c; --bad: #e66767;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151a; --surface: #1a1e25; --fg: #e9ecf1; --fg2: #a8b0bd; --rule: #2c323c;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --note-bg: #17243a; --warn-bg: #2b2117; --good: #4cc04c; --bad: #e66767;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 15.5px/1.6 var(--sans); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 40px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.prose { max-width: 68ch; }
+header { display: grid; gap: 6px; padding-bottom: 24px; border-bottom: 1px solid var(--rule); margin-bottom: 28px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fg2); }
+h1 { font: 600 30px/1.2 var(--sans); margin: 0; text-wrap: balance; }
+h2 { font: 600 21px/1.3 var(--sans); margin: 48px 0 10px; text-wrap: balance; }
+h3 { font: 600 16px/1.4 var(--sans); margin: 24px 0 6px; }
+p { margin: 0 0 12px; }
+.sub { color: var(--fg2); margin: 0; }
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin-bottom: 6px; }
+code, .num { font-family: var(--mono); font-size: .92em; font-variant-numeric: tabular-nums; }
+.box { border-radius: 8px; padding: 18px 22px; margin: 0 0 16px; }
+.box.note { background: var(--note-bg); }
+.box.warn { background: var(--warn-bg); }
+.box h3 { margin-top: 0; }
+.box ol, .box ul { margin-bottom: 0; }
+
+/* stages */
+.stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+.stage { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; background: var(--surface); }
+.stage b { display: block; font-weight: 600; }
+.stage .eyebrow { margin-bottom: 4px; }
+.stage p { margin: 4px 0 0; font-size: 14px; color: var(--fg2); }
+@media (max-width: 760px) { .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .stages { grid-template-columns: 1fr; } }
+
+/* videos */
+.vids { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 20px; margin: 16px 0; }
+.vids figure { margin: 0; min-width: 0; }
+.vids video { width: 100%; max-width: 100%; aspect-ratio: 720 / 460; display: block; border-radius: 6px; background: #000; }
+figcaption { font-size: 14px; color: var(--fg2); margin-top: 6px; }
+figcaption b { color: var(--fg); font-weight: 600; }
+.pair { grid-column: 1 / -1; }
+.pair .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pair .two > div { min-width: 0; }
+.tag { font: 500 12px/1.4 var(--mono); color: var(--fg2); margin-bottom: 4px; }
+@media (max-width: 680px) { .vids, .pair .two { grid-template-columns: 1fr; } }
+
+/* chart */
+.chart-wrap { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; margin: 16px 0 8px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13.5px; color: var(--fg2); margin-bottom: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.panels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.panel { min-width: 0; position: relative; }
+.panel h4 { margin: 0 0 2px; font: 600 13.5px/1.3 var(--sans); }
+.panel svg { width: 100%; height: auto; display: block; overflow: visible; }
+.panel svg text { fill: var(--fg2); font: 10.5px var(--mono); }
+.panel .grid line { stroke: var(--rule); stroke-width: 1; }
+@media (max-width: 760px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tip { position: absolute; pointer-events: none; background: var(--fg); color: var(--bg); font: 12px/1.4 var(--mono);
+  padding: 5px 8px; border-radius: 4px; white-space: nowrap; transform: translate(-50%, -110%); z-index: 2; }
+
+/* tables */
+.tw { overflow-x: auto; margin: 10px 0 16px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 7px 12px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font: 500 12px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .04em; color: var(--fg2); vertical-align: bottom; }
+tbody tr:last-child td { border-bottom: 0; }
+td.pol { font-family: var(--mono); font-size: 13px; }
+tr.sep td { border-top: 2px solid var(--rule); }
+.hi { font-weight: 600; }
+.up { color: var(--good); }
+.dn { color: var(--bad); }
+details { border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); margin: 10px 0; }
+details > summary { cursor: pointer; padding: 10px 14px; font-weight: 500; }
+details > summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; border-radius: 8px; }
+details .tw { border: 0; border-top: 1px solid var(--rule); border-radius: 0; margin: 0; }
+.foot { color: var(--fg2); font-size: 13.5px; border-top: 1px solid var(--rule); margin-top: 48px; padding-top: 16px; }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Arachne hexapod · fault-tolerant path following · simulation · 20 Nov 2026</div>
+  <h1>Four environment stages: results</h1>
+  <p class="sub">MuJoCo MJX + PPO. One policy per stage and sensor set, 40M training steps each, run locally on an RTX 4060. Nothing here is from the real robot.</p>
+</header>
+
+<div class="prose">
+<div class="box note">
+<h3>What we found</h3>
+<ol>
+<li><b>The robot keeps to the drawn path when servos fail.</b> With one broken servo it stays 3–7 mm from the line on average in every stage, at 84–97% of healthy speed. Two dead servos still reach the goal 86–95% of the time when nothing moves in the scene.</li>
+<li><b>Training on rough ground matters.</b> On the terrain, the terrain-trained policy reaches the goal in 100% of single-fault episodes and 91% with three mixed faults; the room-trained policy manages 82% and 66%.</li>
+<li><b>IMU only is as good as IMU + camera, or better, everywhere.</b> It also tracks the path more tightly. At 24×16 pixels the camera adds little; this is the case for the higher-resolution, optical-flow run on a cloud GPU.</li>
+<li><b>Moving objects are the weak point.</b> Policies trained with movers do no better than ones that never saw them, and the robot is still hit in 17–56% of episodes. They have not learned to wait.</li>
+<li><b>Naming the broken servo works only from the IMU in the room</b> (right servo 56% of the time, chance is 8%). On terrain, from the full observation, it is near chance.</li>
+</ol>
+</div>
+</div>
+
+<h2>The four stages</h2>
+<div class="stages">
+  <div class="stage"><div class="eyebrow">Stage 1</div><b>Furnished room</b><p>6×6 m room, random furniture placed off the path, flat floor.</p></div>
+  <div class="stage"><div class="eyebrow">Stage 2</div><b>Room + movers</b><p>Robot vacuum, two rolling balls and a walking person cross the path.</p></div>
+  <div class="stage"><div class="eyebrow">Stage 3</div><b>Rough terrain</b><p>8×8 m field of hills, bumps and stones at 3 cm resolution; rocks, logs, trees.</p></div>
+  <div class="stage"><div class="eyebrow">Stage 4</div><b>Terrain + movers</b><p>The field plus a dog, a football, a hiker and a robot lawnmower.</p></div>
+</div>
+<div class="prose">
+<p>In every stage a path of about 1 m is drawn from the top-down view, and the robot must walk along it to the goal. Faults are random: zero to three servos, each <b>dead</b> (limp), <b>stuck</b> (frozen in place), <b>signal loss</b> (commands randomly dropped; the servo holds the last one) or <b>worn gears</b> (backlash in the gearbox), starting either before the walk or partway through. The policy is told nothing about the fault. Speed losses up to 50% are not penalised; cross-track error is.</p>
+<p>Each policy sees one of three sensor sets: <b>IMU only</b>, <b>camera only</b> (the 24×16 grey body camera, three frames), or <b>both</b>. No sensor noise yet. Movers that can stop (vacuum, person, dog, hiker, mower) wait while the robot is in their way. Walking into a mover ends the episode; being hit from the side or behind counts as "struck" but does not.</p>
+</div>
+
+<h2>Episodes</h2>
+<div class="prose"><p>The overhead map is only for drawing the path; the policy never sees it. The inset at top left is what the body camera sees. Red legs have a broken servo.</p></div>
+<div class="vids">
+  <figure><video src="v1_room.mp4" controls muted loop playsinline preload="metadata" poster="v1_room.jpg"></video>
+    <figcaption><b>Stage 1, IMU only.</b> The front-left knee goes limp, then the rear-right hip freezes. The robot reaches the goal in 16.9 s, 3 mm off the line. The diagnosis line at the bottom (a separate network, not used for control) names both broken servos, plus one false alarm.</figcaption></figure>
+  <figure><video src="v2_dynroom.mp4" controls muted loop playsinline preload="metadata" poster="v2_dynroom.jpg"></video>
+    <figcaption><b>Stage 2, IMU only.</b> Rear-left knee dead partway through; a ball rolls across the room. Goal in 12.1 s, 1 mm off the line.</figcaption></figure>
+  <figure><video src="v3_terrain.mp4" controls muted loop playsinline preload="metadata" poster="v3_terrain.jpg"></video>
+    <figcaption><b>Stage 3, IMU only.</b> Three faults from the first step: front-left knee dead, rear hip stuck, front-right knee dropping commands. It stays within 6 mm of the line on the hill but is too slow, 33 cm short when the 25 s episode ends.</figcaption></figure>
+  <figure><video src="v4_tdyn_healthy.mp4" controls muted loop playsinline preload="metadata" poster="v4_tdyn_healthy.jpg"></video>
+    <figcaption><b>Stage 4, IMU only, healthy.</b> No faults; movers cross the field. Goal in 10.5 s, 4 mm off the line.</figcaption></figure>
+  <figure><video src="v5_tdyn_faults.mp4" controls muted loop playsinline preload="metadata" poster="v5_tdyn_faults.jpg"></video>
+    <figcaption><b>Stage 4, IMU + camera.</b> Rear-left knee dead, then the front-right hip's gears wear. Goal in 13.9 s, 1 mm off the line.</figcaption></figure>
+  <figure class="pair">
+    <div class="two">
+      <div><div class="tag">trained in the room</div><video src="v6_room_policy.mp4" controls muted loop playsinline preload="metadata" poster="v6_room_policy.jpg"></video></div>
+      <div><div class="tag">trained on terrain</div><video src="v6_terr_policy.mp4" controls muted loop playsinline preload="metadata" poster="v6_terr_policy.jpg"></video></div>
+    </div>
+    <figcaption><b>Same terrain, same path, two knees die (IMU + camera).</b> Front-left and rear-right knees die 2 s in. The terrain policy reaches the goal in 17.3 s; the room policy is still 46 cm short at 25 s. Across 256 such episodes: 86% vs 64% success.</figcaption>
+  </figure>
+</div>
+
+<h2>Success as servos die</h2>
+<div class="prose"><p>Share of 256 episodes that reach the goal, for policies trained in each stage. Dead servos fail partway through the walk.</p></div>
+<div class="chart-wrap">
+  <div class="legend">
+    <span><i style="background:var(--s1)"></i>IMU + camera</span>
+    <span><i style="background:var(--s2)"></i>IMU only</span>
+    <span><i style="background:var(--s3)"></i>camera only</span>
+  </div>
+  <div class="panels" id="panels"></div>
+</div>
+
+<h2>Does training in the harder stage help?</h2>
+<div class="prose"><p>Each block tests several policies in one stage. Success rate (%) with the mean distance from the path (mm) below it; the stage's own policy is first.</p></div>
+<div class="tw"><table id="cross"></table></div>
+<div class="prose">
+<p><b>Terrain:</b> yes, clearly. The room policy is 12–27 points behind once servos fail, and 7 behind even when healthy.</p>
+<p><b>Movers:</b> no. In both mover stages, the policy trained with movers is within a few points of one trained without them. The "struck" column barely moves either. The penalty for walking into a mover is the same size as for a fall, and the policy seems to have traded it off against reaching the goal rather than learned to wait.</p>
+<p><b>Faults in the room:</b> a policy trained only healthy (<code>room_both_healthy</code>) does as well under faults as the fault-trained one in the flat room. Fault training pays off only on rough ground, where the gait has less margin.</p>
+</div>
+
+<h2>Naming the broken servo</h2>
+<div class="prose"><p>A separate network reads the policy's inputs over the last few seconds and outputs, for each of the 12 servos, the probability that it is broken. Tested on 308 held-out episodes per policy.</p></div>
+<div class="tw"><table id="diag"></table></div>
+<div class="prose">
+<p>With the IMU alone it finds the broken servo more than half the time, within about 3 s. Once the 1,700 camera numbers are in its input it does much worse, and on terrain, where ground bumps shake the body much like a fault does, it is close to chance. The next step is to diagnose from the IMU and the servo commands only, whatever the policy itself sees.</p>
+</div>
+
+<h2>All results</h2>
+<div class="prose"><p>Every scenario, 256 episodes each. "Ended" is falls plus walking into a mover. Speed is relative to the same policy when healthy.</p></div>
+<div id="full"></div>
+
+<h2>Next</h2>
+<div class="prose">
+<ol>
+<li><b>Movers:</b> raise the cost of walking into one, give the actor the mover's apparent motion in the camera, and add an explicit reward for waiting.</li>
+<li><b>Diagnosis:</b> IMU + commands only, trained per stage.</li>
+<li><b>Camera:</b> cloud GPU run with a higher-resolution body camera and an optical-flow input, then sensor noise.</li>
+<li><b>Interactive sim:</b> load the new terrain policies so a path can be drawn and servos killed live.</li>
+</ol>
+</div>
+
+<div class="foot">Policies: <code>room_*</code>, <code>dyn2_*</code>, <code>terr_*</code>, <code>tdyn_*</code> in <code>vorpal-mujoco/rl/runs/</code>. <code>dyn_*</code> were trained before the mover rules were fixed. All numbers from simulation.</div>
+</div>
+
+<script id="data" type="application/json">{"evals": {"runs_eval_room_both.out": [["room_both", "healthy", 98.0, 0.0, 4.7, 12.0, 100, null], ["room_both", "1 dead, from start", 96.5, 0.0, 5.2, 13.7, 82, null], ["room_both", "1 dead, mid-walk", 96.9, 0.0, 4.9, 12.7, 84, null], ["room_both", "1 stuck, from start", 97.3, 0.0, 5.2, 13.6, 89, null], ["room_both", "1 stuck, mid-walk", 96.5, 0.0, 5.1, 13.3, 90, null], ["room_both", "1 signal loss, from start", 98.0, 0.0, 5.0, 13.1, 91, null], ["room_both", "1 signal loss, mid-walk", 98.4, 0.0, 4.9, 13.0, 92, null], ["room_both", "1 worn gears, from start", 98.4, 0.0, 4.9, 12.7, 97, null], ["room_both", "1 worn gears, mid-walk", 98.0, 0.0, 4.8, 12.6, 97, null], ["room_both", "2 dead, mid-walk", 88.7, 0.0, 6.1, 17.0, 74, null], ["room_both", "3 dead, mid-walk", 63.7, 0.0, 12.2, 54.0, 66, null], ["room_both", "3 mixed, from start", 90.6, 0.4, 6.5, 16.4, 69, null]], "runs_eval_room_cam.out": [["room_cam", "healthy", 98.4, 0.0, 4.6, 12.0, 100, null], ["room_cam", "1 dead, from start", 97.3, 0.0, 5.1, 13.3, 82, null], ["room_cam", "1 dead, mid-walk", 98.4, 0.0, 4.9, 12.8, 85, null], ["room_cam", "1 stuck, from start", 98.0, 0.0, 5.0, 12.8, 90, null], ["room_cam", "1 stuck, mid-walk", 98.0, 0.0, 4.9, 12.9, 90, null], ["room_cam", "1 signal loss, from start", 99.6, 0.0, 4.9, 12.8, 92, null], ["room_cam", "1 signal loss, mid-walk", 100.0, 0.0, 4.9, 12.4, 93, null], ["room_cam", "1 worn gears, from start", 99.6, 0.0, 4.8, 12.4, 96, null], ["room_cam", "1 worn gears, mid-walk", 99.2, 0.0, 4.8, 12.5, 97, null], ["room_cam", "2 dead, mid-walk", 90.6, 0.0, 6.3, 16.5, 74, null], ["room_cam", "3 dead, mid-walk", 64.1, 0.0, 10.2, 40.5, 65, null], ["room_cam", "3 mixed, from start", 92.2, 0.0, 6.3, 15.6, 68, null]], "runs_eval_room_imu.out": [["room_imu", "healthy", 100.0, 0.0, 2.9, 7.8, 100, null], ["room_imu", "1 dead, from start", 100.0, 0.0, 3.3, 9.0, 85, null], ["room_imu", "1 dead, mid-walk", 100.0, 0.0, 3.3, 8.9, 86, null], ["room_imu", "1 stuck, from start", 100.0, 0.0, 3.1, 8.5, 89, null], ["room_imu", "1 stuck, mid-walk", 100.0, 0.0, 3.2, 8.7, 91, null], ["room_imu", "1 signal loss, from start", 100.0, 0.0, 3.2, 8.5, 91, null], ["room_imu", "1 signal loss, mid-walk", 100.0, 0.0, 3.1, 8.4, 92, null], ["room_imu", "1 worn gears, from start", 100.0, 0.0, 3.1, 8.1, 96, null], ["room_imu", "1 worn gears, mid-walk", 100.0, 0.0, 3.0, 8.0, 97, null], ["room_imu", "2 dead, mid-walk", 94.5, 0.0, 4.1, 11.2, 77, null], ["room_imu", "3 dead, mid-walk", 69.9, 0.0, 9.2, 41.3, 70, null], ["room_imu", "3 mixed, from start", 96.5, 0.0, 4.3, 11.7, 70, null]], "runs_eval_room_both_healthy.out": [["room_both_healthy", "healthy", 99.6, 0.0, 3.2, 8.8, 100, null], ["room_both_healthy", "1 dead, from start", 99.2, 0.0, 4.0, 11.3, 80, null], ["room_both_healthy", "1 dead, mid-walk", 98.8, 0.0, 3.8, 10.7, 83, null], ["room_both_healthy", "1 stuck, from start", 99.6, 0.0, 3.7, 10.4, 88, null], ["room_both_healthy", "1 stuck, mid-walk", 99.2, 0.0, 3.8, 10.4, 88, null], ["room_both_healthy", "1 signal loss, from start", 100.0, 0.0, 3.5, 10.0, 90, null], ["room_both_healthy", "1 signal loss, mid-walk", 100.0, 0.0, 3.5, 9.7, 92, null], ["room_both_healthy", "1 worn gears, from start", 99.6, 0.0, 3.3, 9.6, 96, null], ["room_both_healthy", "1 worn gears, mid-walk", 99.6, 0.0, 3.5, 9.5, 97, null], ["room_both_healthy", "2 dead, mid-walk", 90.2, 0.0, 6.1, 18.8, 71, null], ["room_both_healthy", "3 dead, mid-walk", 63.7, 0.8, 11.1, 44.8, 61, null], ["room_both_healthy", "3 mixed, from start", 93.4, 0.0, 5.4, 14.9, 68, null]], "runs_eval_dyn2_both.out": [["dyn2_both", "healthy", 80.1, 20.3, 4.4, 11.3, 100, 38], ["dyn2_both", "1 dead, from start", 71.5, 28.5, 5.3, 13.8, 85, 50], ["dyn2_both", "1 dead, mid-walk", 69.1, 30.9, 5.2, 13.6, 87, 51], ["dyn2_both", "1 stuck, from start", 70.7, 29.3, 5.0, 12.9, 90, 47], ["dyn2_both", "1 stuck, mid-walk", 73.4, 25.4, 4.9, 13.1, 90, 45], ["dyn2_both", "1 signal loss, from start", 75.8, 24.6, 4.7, 12.4, 93, 46], ["dyn2_both", "1 signal loss, mid-walk", 73.4, 26.2, 4.7, 12.4, 94, 43], ["dyn2_both", "1 worn gears, from start", 79.3, 21.1, 4.7, 12.5, 96, 42], ["dyn2_both", "1 worn gears, mid-walk", 77.3, 22.7, 4.6, 11.8, 97, 42], ["dyn2_both", "2 dead, mid-walk", 58.6, 34.8, 6.0, 17.0, 77, 57], ["dyn2_both", "3 dead, mid-walk", 36.7, 34.8, 11.8, 52.3, 67, 55], ["dyn2_both", "3 mixed, from start", 60.9, 30.9, 6.8, 19.2, 69, 51], ["dyn_both", "healthy", 79.3, 21.1, 5.7, 15.1, 100, 36], ["dyn_both", "1 dead, from start", 73.0, 26.2, 5.8, 15.0, 85, 50], ["dyn_both", "1 dead, mid-walk", 69.5, 29.3, 5.9, 15.2, 85, 49], ["dyn_both", "1 stuck, from start", 75.4, 23.0, 5.9, 15.5, 92, 43], ["dyn_both", "1 stuck, mid-walk", 76.6, 22.3, 6.0, 15.5, 91, 44], ["dyn_both", "1 signal loss, from start", 76.6, 23.0, 5.9, 14.9, 92, 42], ["dyn_both", "1 signal loss, mid-walk", 73.0, 26.2, 5.9, 15.1, 92, 43], ["dyn_both", "1 worn gears, from start", 76.2, 23.8, 5.6, 14.5, 95, 39], ["dyn_both", "1 worn gears, mid-walk", 76.2, 24.2, 5.7, 14.8, 97, 39], ["dyn_both", "2 dead, mid-walk", 56.2, 35.5, 6.9, 17.5, 75, 54], ["dyn_both", "3 dead, mid-walk", 43.0, 31.2, 12.3, 52.8, 68, 49], ["dyn_both", "3 mixed, from start", 65.2, 27.7, 7.1, 18.7, 69, 47], ["room_both", "healthy", 78.9, 19.5, 4.5, 11.8, 100, 34], ["room_both", "1 dead, from start", 73.4, 22.7, 5.2, 13.6, 84, 45], ["room_both", "1 dead, mid-walk", 74.6, 23.4, 5.1, 13.0, 87, 46], ["room_both", "1 stuck, from start", 74.6, 23.8, 5.0, 13.0, 90, 44], ["room_both", "1 stuck, mid-walk", 75.0, 23.4, 5.0, 13.2, 90, 44], ["room_both", "1 signal loss, from start", 77.7, 21.1, 4.9, 12.7, 91, 42], ["room_both", "1 signal loss, mid-walk", 77.3, 21.1, 4.7, 12.3, 92, 39], ["room_both", "1 worn gears, from start", 75.8, 22.7, 4.6, 12.0, 97, 38], ["room_both", "1 worn gears, mid-walk", 80.1, 18.4, 4.6, 11.8, 97, 36], ["room_both", "2 dead, mid-walk", 57.0, 33.2, 6.5, 19.0, 76, 54], ["room_both", "3 dead, mid-walk", 43.4, 30.1, 11.0, 45.2, 64, 55], ["room_both", "3 mixed, from start", 66.0, 24.2, 6.2, 17.2, 71, 46]], "runs_eval_dyn2_imu.out": [["dyn2_imu", "healthy", 84.0, 16.8, 2.4, 6.9, 100, 25], ["dyn2_imu", "1 dead, from start", 79.3, 20.7, 2.7, 8.2, 87, 40], ["dyn2_imu", "1 dead, mid-walk", 79.3, 21.1, 2.7, 7.9, 89, 39], ["dyn2_imu", "1 stuck, from start", 82.4, 18.0, 2.6, 7.8, 91, 35], ["dyn2_imu", "1 stuck, mid-walk", 81.6, 18.4, 2.7, 7.9, 91, 36], ["dyn2_imu", "1 signal loss, from start", 82.0, 18.8, 2.6, 7.7, 92, 35], ["dyn2_imu", "1 signal loss, mid-walk", 81.2, 19.5, 2.7, 7.7, 92, 34], ["dyn2_imu", "1 worn gears, from start", 85.2, 15.6, 2.5, 7.3, 97, 28], ["dyn2_imu", "1 worn gears, mid-walk", 85.9, 14.8, 2.5, 7.2, 98, 27], ["dyn2_imu", "2 dead, mid-walk", 68.8, 27.3, 3.5, 10.1, 79, 46], ["dyn2_imu", "3 dead, mid-walk", 48.0, 33.6, 7.6, 36.1, 69, 54], ["dyn2_imu", "3 mixed, from start", 65.6, 31.6, 3.9, 11.7, 73, 54]], "runs_eval_terr_both.out": [["terr_both", "healthy", 100.0, 0.0, 5.3, 14.2, 100, null], ["terr_both", "1 dead, from start", 100.0, 0.0, 6.1, 16.7, 81, null], ["terr_both", "1 dead, mid-walk", 100.0, 0.0, 6.0, 16.4, 83, null], ["terr_both", "1 stuck, from start", 100.0, 0.0, 5.7, 15.4, 86, null], ["terr_both", "1 stuck, mid-walk", 100.0, 0.0, 5.9, 16.2, 88, null], ["terr_both", "1 signal loss, from start", 100.0, 0.0, 5.7, 15.5, 89, null], ["terr_both", "1 signal loss, mid-walk", 100.0, 0.0, 5.5, 15.2, 91, null], ["terr_both", "1 worn gears, from start", 100.0, 0.0, 5.4, 14.6, 96, null], ["terr_both", "1 worn gears, mid-walk", 100.0, 0.0, 5.4, 14.5, 97, null], ["terr_both", "2 dead, mid-walk", 85.9, 1.2, 10.2, 36.4, 73, null], ["terr_both", "3 dead, mid-walk", 59.0, 11.7, 18.6, 83.5, 62, null], ["terr_both", "3 mixed, from start", 91.4, 0.4, 8.0, 22.2, 65, null], ["room_both", "healthy", 93.4, 0.4, 7.0, 18.8, 100, null], ["room_both", "1 dead, from start", 80.9, 0.0, 8.2, 23.7, 78, null], ["room_both", "1 dead, mid-walk", 82.0, 0.8, 8.6, 24.5, 82, null], ["room_both", "1 stuck, from start", 85.9, 0.0, 7.7, 21.2, 86, null], ["room_both", "1 stuck, mid-walk", 87.5, 0.4, 7.8, 22.1, 88, null], ["room_both", "1 signal loss, from start", 93.0, 0.0, 7.4, 19.7, 89, null], ["room_both", "1 signal loss, mid-walk", 91.8, 0.4, 7.3, 19.8, 91, null], ["room_both", "1 worn gears, from start", 92.2, 0.4, 7.4, 19.9, 96, null], ["room_both", "1 worn gears, mid-walk", 92.6, 0.4, 7.2, 19.3, 98, null], ["room_both", "2 dead, mid-walk", 63.7, 1.2, 11.7, 41.1, 68, null], ["room_both", "3 dead, mid-walk", 32.4, 15.6, 16.2, 62.1, 60, null], ["room_both", "3 mixed, from start", 65.6, 0.0, 9.5, 27.3, 64, null]], "runs_eval_terr_imu.out": [["terr_imu", "healthy", 100.0, 0.0, 4.1, 10.6, 100, null], ["terr_imu", "1 dead, from start", 100.0, 0.0, 4.7, 12.6, 83, null], ["terr_imu", "1 dead, mid-walk", 100.0, 0.0, 4.7, 12.4, 86, null], ["terr_imu", "1 stuck, from start", 100.0, 0.0, 4.4, 11.5, 89, null], ["terr_imu", "1 stuck, mid-walk", 99.2, 0.0, 4.4, 11.8, 89, null], ["terr_imu", "1 signal loss, from start", 100.0, 0.0, 4.4, 11.6, 90, null], ["terr_imu", "1 signal loss, mid-walk", 100.0, 0.0, 4.4, 11.5, 91, null], ["terr_imu", "1 worn gears, from start", 100.0, 0.0, 4.2, 11.0, 97, null], ["terr_imu", "1 worn gears, mid-walk", 100.0, 0.0, 4.2, 10.9, 97, null], ["terr_imu", "2 dead, mid-walk", 90.6, 0.0, 7.8, 22.9, 77, null], ["terr_imu", "3 dead, mid-walk", 60.5, 8.2, 14.4, 65.5, 67, null], ["terr_imu", "3 mixed, from start", 94.1, 0.0, 6.1, 16.1, 69, null]], "runs_eval_tdyn_both.out": [["tdyn_both", "healthy", 90.2, 10.9, 5.8, 15.6, 100, 17], ["tdyn_both", "1 dead, from start", 82.4, 18.4, 6.6, 18.4, 84, 30], ["tdyn_both", "1 dead, mid-walk", 84.4, 16.8, 6.5, 17.6, 86, 28], ["tdyn_both", "1 stuck, from start", 85.9, 14.1, 6.3, 17.7, 89, 26], ["tdyn_both", "1 stuck, mid-walk", 87.5, 15.6, 6.2, 16.7, 89, 27], ["tdyn_both", "1 signal loss, from start", 86.7, 15.6, 6.1, 16.7, 90, 25], ["tdyn_both", "1 signal loss, mid-walk", 88.7, 14.1, 6.1, 16.6, 92, 21], ["tdyn_both", "1 worn gears, from start", 86.7, 14.1, 5.9, 16.0, 97, 20], ["tdyn_both", "1 worn gears, mid-walk", 88.7, 12.9, 6.0, 16.2, 98, 17], ["tdyn_both", "2 dead, mid-walk", 74.6, 16.8, 9.5, 31.7, 78, 32], ["tdyn_both", "3 dead, mid-walk", 44.9, 31.2, 15.9, 60.0, 68, 38], ["tdyn_both", "3 mixed, from start", 70.7, 23.0, 8.7, 26.6, 69, 38], ["terr_both", "healthy", 91.8, 9.8, 5.7, 15.4, 100, 18], ["terr_both", "1 dead, from start", 80.1, 19.5, 6.4, 17.8, 81, 36], ["terr_both", "1 dead, mid-walk", 85.2, 15.6, 6.4, 17.4, 85, 31], ["terr_both", "1 stuck, from start", 84.0, 16.0, 6.0, 16.4, 87, 29], ["terr_both", "1 stuck, mid-walk", 85.2, 15.2, 6.1, 16.6, 88, 29], ["terr_both", "1 signal loss, from start", 85.5, 14.8, 6.0, 16.5, 90, 27], ["terr_both", "1 signal loss, mid-walk", 86.3, 14.8, 6.0, 16.2, 91, 27], ["terr_both", "1 worn gears, from start", 88.7, 12.9, 5.7, 15.4, 96, 22], ["terr_both", "1 worn gears, mid-walk", 89.1, 13.3, 5.7, 15.3, 98, 21], ["terr_both", "2 dead, mid-walk", 69.5, 21.1, 11.6, 45.4, 73, 38], ["terr_both", "3 dead, mid-walk", 41.8, 32.0, 16.4, 62.4, 64, 41], ["terr_both", "3 mixed, from start", 67.2, 22.3, 9.6, 29.6, 68, 36], ["room_both", "healthy", 76.2, 17.6, 7.0, 18.7, 100, 32], ["room_both", "1 dead, from start", 57.8, 19.1, 8.5, 23.9, 80, 38], ["room_both", "1 dead, mid-walk", 62.5, 16.8, 8.4, 23.3, 82, 38], ["room_both", "1 stuck, from start", 71.9, 15.2, 7.9, 21.3, 87, 36], ["room_both", "1 stuck, mid-walk", 63.3, 21.1, 7.8, 20.8, 85, 36], ["room_both", "1 signal loss, from start", 71.9, 18.4, 7.5, 20.0, 89, 36], ["room_both", "1 signal loss, mid-walk", 73.4, 19.5, 7.3, 19.4, 90, 37], ["room_both", "1 worn gears, from start", 70.7, 22.7, 7.3, 20.0, 96, 34], ["room_both", "1 worn gears, mid-walk", 72.7, 21.5, 7.0, 18.7, 96, 37], ["room_both", "2 dead, mid-walk", 43.4, 22.3, 12.8, 44.5, 69, 37], ["room_both", "3 dead, mid-walk", 19.5, 37.9, 17.0, 66.2, 59, 33], ["room_both", "3 mixed, from start", 46.1, 22.7, 9.9, 29.2, 66, 34]], "runs_eval_tdyn_imu.out": [["tdyn_imu", "healthy", 89.5, 12.5, 3.5, 10.1, 100, 20], ["tdyn_imu", "1 dead, from start", 82.8, 17.6, 4.3, 12.4, 84, 29], ["tdyn_imu", "1 dead, mid-walk", 83.6, 16.8, 4.1, 12.0, 87, 30], ["tdyn_imu", "1 stuck, from start", 85.9, 15.6, 4.0, 11.4, 89, 31], ["tdyn_imu", "1 stuck, mid-walk", 87.5, 13.7, 3.9, 11.4, 90, 29], ["tdyn_imu", "1 signal loss, from start", 84.0, 16.8, 3.9, 11.2, 91, 28], ["tdyn_imu", "1 signal loss, mid-walk", 87.5, 13.7, 3.9, 11.3, 92, 28], ["tdyn_imu", "1 worn gears, from start", 87.5, 13.7, 3.7, 10.6, 96, 22], ["tdyn_imu", "1 worn gears, mid-walk", 87.5, 13.7, 3.6, 10.5, 97, 22], ["tdyn_imu", "2 dead, mid-walk", 70.7, 23.4, 6.9, 21.2, 76, 38], ["tdyn_imu", "3 dead, mid-walk", 48.0, 27.3, 13.7, 66.2, 72, 38], ["tdyn_imu", "3 mixed, from start", 72.3, 22.3, 6.1, 17.4, 69, 34]]}, "diag": [{"policy": "room_imu", "scene": "room", "sensors": "imu", "episodes": 1536, "heldout": 308, "detect_auroc": 0.8488483455726037, "right_servo_pct": 56.32091690544413, "all_found_1_pct": 56.32091690544413, "all_found_2_pct": 15.149537146926182, "all_found_3_pct": 6.835232008891359, "false_alarms_per_min": 0.17970989688074965, "detected_pct": 85.44061302681992, "median_delay_s": 3.4000000000000004}, {"policy": "room_both", "scene": "room", "sensors": "both", "episodes": 1536, "heldout": 308, "detect_auroc": 0.6989681350745006, "right_servo_pct": 19.421203438395416, "all_found_1_pct": 19.421203438395416, "all_found_2_pct": 4.355566104913364, "all_found_3_pct": 1.0558488469019172, "false_alarms_per_min": 0.2567284241153566, "detected_pct": 31.03448275862069, "median_delay_s": 7.2}, {"policy": "room_cam", "scene": "room", "sensors": "cam", "episodes": 1536, "heldout": 308, "detect_auroc": 0.5568003450430435, "right_servo_pct": 9.765042979942693, "all_found_1_pct": 9.765042979942693, "all_found_2_pct": 3.2103014478993592, "all_found_3_pct": 0.7918866351764378, "false_alarms_per_min": 0.2824012665268923, "detected_pct": 3.8314176245210727, "median_delay_s": 12.45}, {"policy": "terr_both", "scene": "terrain", "sensors": "both", "episodes": 1536, "heldout": 308, "detect_auroc": 0.587331091667679, "right_servo_pct": 15.69054441260745, "all_found_1_pct": 15.69054441260745, "all_found_2_pct": 4.717540944694991, "all_found_3_pct": 0.8891358710752986, "false_alarms_per_min": 0.30807410893842796, "detected_pct": 4.980842911877394, "median_delay_s": 12.9}, {"policy": "tdyn_both", "scene": "terrain_dyn", "sensors": "both", "episodes": 1536, "heldout": 308, "detect_auroc": 0.6013095176776144, "right_servo_pct": 13.234629861982434, "all_found_1_pct": 13.234629861982434, "all_found_2_pct": 1.821642196846112, "all_found_3_pct": 1.5238095238095237, "false_alarms_per_min": 0.1829082410324154, "detected_pct": 15.613382899628252, "median_delay_s": 13.5}]}</script>
+<script>
+const D = JSON.parse(document.getElementById("data").textContent);
+const E = D.evals;
+const rows = (file, pol) => E[file].filter(r => r[0] === pol);
+const get = (file, pol, sc) => E[file].find(r => r[0] === pol && r[1] === sc);
+const X = ["healthy", "1 dead, mid-walk", "2 dead, mid-walk", "3 dead, mid-walk"];
+const XL = ["0", "1", "2", "3"];
+const COL = {both: "var(--s1)", imu: "var(--s2)", cam: "var(--s3)"};
+const NAME = {both: "IMU + camera", imu: "IMU only", cam: "camera only"};
+
+// small multiples
+const panels = [
+  {t: "1 · Room", f: {both: ["runs_eval_room_both.out", "room_both"], imu: ["runs_eval_room_imu.out", "room_imu"], cam: ["runs_eval_room_cam.out", "room_cam"]}},
+  {t: "2 · Room + movers", f: {both: ["runs_eval_dyn2_both.out", "dyn2_both"], imu: ["runs_eval_dyn2_imu.out", "dyn2_imu"]}},
+  {t: "3 · Terrain", f: {both: ["runs_eval_terr_both.out", "terr_both"], imu: ["runs_eval_terr_imu.out", "terr_imu"]}},
+  {t: "4 · Terrain + movers", f: {both: ["runs_eval_tdyn_both.out", "tdyn_both"], imu: ["runs_eval_tdyn_imu.out", "tdyn_imu"]}},
+];
+const W = 200, H = 160, L = 30, R = 8, T = 8, B = 30;
+const sx = i => L + i * (W - L - R) / 3, sy = v => T + (100 - v) / 100 * (H - T - B);
+const host = document.getElementById("panels");
+panels.forEach(p => {
+  const div = document.createElement("div"); div.className = "panel";
+  let s = `<h4>${p.t}</h4><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${p.t}: success rate by number of dead servos"><g class="grid">`;
+  [0, 25, 50, 75, 100].forEach(v => s += `<line x1="${L}" x2="${W - R}" y1="${sy(v)}" y2="${sy(v)}"/><text x="${L - 5}" y="${sy(v) + 3.5}" text-anchor="end">${v}</text>`);
+  s += `</g>`;
+  XL.forEach((l, i) => s += `<text x="${sx(i)}" y="${H - B + 14}" text-anchor="middle">${l}</text>`);
+  s += `<text x="${(L + W - R) / 2}" y="${H - 3}" text-anchor="middle">dead servos</text>`;
+  Object.entries(p.f).forEach(([k, [f, pol]]) => {
+    const v = X.map(sc => get(f, pol, sc)[2]);
+    s += `<polyline fill="none" stroke="${COL[k]}" stroke-width="2" stroke-linejoin="round" points="${v.map((y, i) => `${sx(i)},${sy(y)}`).join(" ")}"/>`;
+    v.forEach((y, i) => s += `<circle cx="${sx(i)}" cy="${sy(y)}" r="4" fill="${COL[k]}" stroke="var(--surface)" stroke-width="2"/>` +
+      `<circle cx="${sx(i)}" cy="${sy(y)}" r="11" fill="transparent" data-tip="${NAME[k]} · ${XL[i]} dead: ${y.toFixed(1)}%"/>`);
+  });
+  s += `</svg>`;
+  div.innerHTML = s; host.appendChild(div);
+});
+host.querySelectorAll("[data-tip]").forEach(c => {
+  c.addEventListener("mouseenter", () => {
+    const panel = c.closest(".panel"), svg = panel.querySelector("svg"), r = svg.getBoundingClientRect(), pr = panel.getBoundingClientRect();
+    const k = r.width / W, t = document.createElement("div"); t.className = "tip"; t.textContent = c.dataset.tip;
+    t.style.left = (r.left - pr.left + c.cx.baseVal.value * k) + "px"; t.style.top = (r.top - pr.top + c.cy.baseVal.value * k) + "px";
+    panel.appendChild(t); c._t = t;
+  });
+  c.addEventListener("mouseleave", () => { c._t && c._t.remove(); });
+});
+
+// cross-stage table
+const SC = ["healthy", "1 dead, mid-walk", "1 stuck, mid-walk", "2 dead, mid-walk", "3 dead, mid-walk", "3 mixed, from start"];
+const SCL = ["healthy", "1 dead", "1 stuck", "2 dead", "3 dead", "3 mixed", "struck"];
+const blocks = [
+  ["Stage 1 · room", "runs_eval_room_both.out", ["room_both"]],
+  ["", "runs_eval_room_both_healthy.out", ["room_both_healthy"]],
+  ["Stage 2 · room + movers", "runs_eval_dyn2_both.out", ["dyn2_both", "dyn_both", "room_both"]],
+  ["Stage 3 · terrain", "runs_eval_terr_both.out", ["terr_both", "room_both"]],
+  ["Stage 4 · terrain + movers", "runs_eval_tdyn_both.out", ["tdyn_both", "terr_both", "room_both"]],
+];
+let h = `<thead><tr><th>Tested in · policy</th>${SCL.map(s => `<th>${s}</th>`).join("")}</tr></thead><tbody>`;
+blocks.forEach(([title, f, pols]) => {
+  pols.forEach((p, j) => {
+    const rs = SC.map(sc => get(f, p, sc));
+    const st = rows(f, p).map(r => r[7]).filter(v => v != null);
+    const struck = st.length ? Math.round(st.reduce((a, b) => a + b, 0) / st.length) + "%" : "–";
+    const cls = title && j === 0 ? ' class="sep"' : "";
+    h += `<tr${cls}><td class="pol">${j === 0 && title ? `<span class="eyebrow">${title}</span><br>` : ""}${p}</td>` +
+      rs.map(r => `<td><span class="${j === 0 ? "hi" : ""}">${r[2].toFixed(0)}</span><br><span class="num" style="color:var(--fg2)">${r[4].toFixed(1)}</span></td>`).join("") +
+      `<td>${struck}</td></tr>`;
+  });
+});
+document.getElementById("cross").innerHTML = h + "</tbody>";
+
+// diagnosis
+const dg = D.diag;
+document.getElementById("diag").innerHTML = `<thead><tr><th>Policy · stage</th><th>Sensors</th><th>Right servo</th><th>Fault noticed</th><th>Median delay</th><th>False alarms / min</th><th>AUROC</th></tr></thead><tbody>` +
+  dg.map(d => `<tr><td class="pol">${d.policy} · ${d.scene}</td><td>${NAME[d.sensors]}</td><td class="${d.right_servo_pct > 40 ? "hi" : ""}">${d.right_servo_pct.toFixed(0)}%</td><td>${d.detected_pct.toFixed(0)}%</td><td>${d.median_delay_s.toFixed(1)} s</td><td>${d.false_alarms_per_min.toFixed(2)}</td><td>${d.detect_auroc.toFixed(2)}</td></tr>`).join("") +
+  `<tr><td class="pol" style="color:var(--fg2)">chance</td><td></td><td style="color:var(--fg2)">8%</td><td></td><td></td><td></td><td style="color:var(--fg2)">0.50</td></tr></tbody>`;
+
+// full tables
+const full = [
+  ["Stage 1 · furnished room", "runs_eval_room_both.out runs_eval_room_imu.out runs_eval_room_cam.out runs_eval_room_both_healthy.out"],
+  ["Stage 2 · room + movers", "runs_eval_dyn2_both.out runs_eval_dyn2_imu.out"],
+  ["Stage 3 · rough terrain", "runs_eval_terr_both.out runs_eval_terr_imu.out"],
+  ["Stage 4 · terrain + movers", "runs_eval_tdyn_both.out runs_eval_tdyn_imu.out"],
+];
+document.getElementById("full").innerHTML = full.map(([t, fs]) => {
+  const all = fs.split(" ").flatMap(f => E[f]);
+  const hasS = all.some(r => r[7] != null);
+  let x = `<details><summary>${t}</summary><div class="tw"><table><thead><tr><th>Policy</th><th>Scenario</th><th>Success</th><th>Ended</th><th>Off path, mean</th><th>p95</th><th>Speed</th>${hasS ? "<th>Struck</th>" : ""}</tr></thead><tbody>`;
+  let prev = "";
+  all.forEach(r => {
+    x += `<tr${r[0] !== prev && prev ? ' class="sep"' : ""}><td class="pol">${r[0] !== prev ? r[0] : ""}</td><td>${r[1]}</td><td>${r[2].toFixed(1)}%</td><td>${r[3].toFixed(1)}%</td><td>${r[4].toFixed(1)} mm</td><td>${r[5].toFixed(1)} mm</td><td>${r[6]}%</td>${hasS ? `<td>${r[7] == null ? "–" : r[7] + "%"}</td>` : ""}</tr>`;
+    prev = r[0];
+  });
+  return x + "</tbody></table></div></details>";
+}).join("");
+</script>

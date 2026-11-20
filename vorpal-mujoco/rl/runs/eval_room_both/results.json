@@ -1,0 +1,115 @@
+{
+ "room_both": {
+  "scene": "room",
+  "sensors": "both",
+  "faults_in_training": true,
+  "healthy": {
+   "success_pct": 98.046875,
+   "ended_pct": 0.0,
+   "path_pct": 99.17305112924133,
+   "xtrack_mean_mm": 4.65554666519165,
+   "xtrack_p95_mm": 11.99714469909668,
+   "t_goal_s": 8.950000000000001,
+   "speed_vs_healthy_pct": 100.0
+  },
+  "1 dead, from start": {
+   "success_pct": 96.484375,
+   "ended_pct": 0.0,
+   "path_pct": 98.13714981709305,
+   "xtrack_mean_mm": 5.233207702636719,
+   "xtrack_p95_mm": 13.72573471069336,
+   "t_goal_s": 10.9,
+   "speed_vs_healthy_pct": 82.0945945945946
+  },
+  "1 dead, mid-walk": {
+   "success_pct": 96.875,
+   "ended_pct": 0.0,
+   "path_pct": 98.63571490855061,
+   "xtrack_mean_mm": 4.869424343109131,
+   "xtrack_p95_mm": 12.697062492370605,
+   "t_goal_s": 10.600000000000001,
+   "speed_vs_healthy_pct": 84.17574773939253
+  },
+  "1 stuck, from start": {
+   "success_pct": 97.265625,
+   "ended_pct": 0.0,
+   "path_pct": 98.77757432168373,
+   "xtrack_mean_mm": 5.226925373077393,
+   "xtrack_p95_mm": 13.58268928527832,
+   "t_goal_s": 9.9,
+   "speed_vs_healthy_pct": 89.375
+  },
+  "1 stuck, mid-walk": {
+   "success_pct": 96.484375,
+   "ended_pct": 0.0,
+   "path_pct": 98.41465521984765,
+   "xtrack_mean_mm": 5.103496074676514,
+   "xtrack_p95_mm": 13.29783821105957,
+   "t_goal_s": 10.100000000000001,
+   "speed_vs_healthy_pct": 90.28770192194318
+  },
+  "1 signal loss, from start": {
+   "success_pct": 98.046875,
+   "ended_pct": 0.0,
+   "path_pct": 99.1978802954734,
+   "xtrack_mean_mm": 5.0099077224731445,
+   "xtrack_p95_mm": 13.108765602111816,
+   "t_goal_s": 9.850000000000001,
+   "speed_vs_healthy_pct": 91.0828025477707
+  },
+  "1 signal loss, mid-walk": {
+   "success_pct": 98.4375,
+   "ended_pct": 0.0,
+   "path_pct": 99.37634926154941,
+   "xtrack_mean_mm": 4.9415693283081055,
+   "xtrack_p95_mm": 12.996468544006348,
+   "t_goal_s": 9.65,
+   "speed_vs_healthy_pct": 92.16920239741818
+  },
+  "1 worn gears, from start": {
+   "success_pct": 98.4375,
+   "ended_pct": 0.0,
+   "path_pct": 99.17343056028697,
+   "xtrack_mean_mm": 4.9247965812683105,
+   "xtrack_p95_mm": 12.718961715698242,
+   "t_goal_s": 9.325,
+   "speed_vs_healthy_pct": 96.83357469087667
+  },
+  "1 worn gears, mid-walk": {
+   "success_pct": 98.046875,
+   "ended_pct": 0.0,
+   "path_pct": 98.9683011942949,
+   "xtrack_mean_mm": 4.794388294219971,
+   "xtrack_p95_mm": 12.610496520996094,
+   "t_goal_s": 9.1,
+   "speed_vs_healthy_pct": 97.38562091503267
+  },
+  "2 dead, mid-walk": {
+   "success_pct": 88.671875,
+   "ended_pct": 0.0,
+   "path_pct": 94.84791781806285,
+   "xtrack_mean_mm": 6.144933223724365,
+   "xtrack_p95_mm": 16.983856201171875,
+   "t_goal_s": 12.100000000000001,
+   "speed_vs_healthy_pct": 74.07407407407408
+  },
+  "3 dead, mid-walk": {
+   "success_pct": 63.671875,
+   "ended_pct": 0.0,
+   "path_pct": 84.66887410056148,
+   "xtrack_mean_mm": 12.214101791381836,
+   "xtrack_p95_mm": 53.97206497192383,
+   "t_goal_s": 13.200000000000001,
+   "speed_vs_healthy_pct": 66.38500722792043
+  },
+  "3 mixed, from start": {
+   "success_pct": 90.625,
+   "ended_pct": 0.390625,
+   "path_pct": 93.97424787296582,
+   "xtrack_mean_mm": 6.477924346923828,
+   "xtrack_p95_mm": 16.382917404174805,
+   "t_goal_s": 13.25,
+   "speed_vs_healthy_pct": 69.20289855072464
+  }
+ }
+}

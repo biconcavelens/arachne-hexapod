@@ -26,13 +26,14 @@ EVAL_SIZE = {0: 0.0, 1: 0.8, 2: float(np.radians(15)), 3: float(np.radians(3.5))
 def load_policy(name, env):
     run = os.path.join(ROOT, "runs", name)
     cfg = json.load(open(os.path.join(run, "config.json")))
+    import room_scene as RS_
+    want, have = cfg.get("cam", "24x16"), f"{RS_.CAM_W}x{RS_.CAM_H}"
+    assert want == have, f"{name} was trained with a {want} camera; run with ARACHNE_CAM={want} (now {have})"
     params = pickle.load(open(os.path.join(run, "params.pkl"), "rb"))
-    nets = ppo_networks.make_ppo_networks(
-        env.observation_size, env.action_size,
-        preprocess_observations_fn=running_statistics.normalize,
-        policy_hidden_layer_sizes=tuple(cfg["policy_layers"]),
-        value_hidden_layer_sizes=tuple(cfg["value_layers"]),
-        policy_obs_key="state", value_obs_key="privileged_state")
+    import policy_nets
+    nets = policy_nets.factory(cfg.get("encoder", "mlp"), cfg.get("cam_shape"), tuple(cfg["policy_layers"]),
+                               tuple(cfg["value_layers"]))(
+        env.observation_size, env.action_size, preprocess_observations_fn=running_statistics.normalize)
     policy = ppo_networks.make_inference_fn(nets)((params[0], params[1]), deterministic=True)
     return lambda obs: policy(obs, jax.random.PRNGKey(0))[0]
 
@@ -53,7 +54,7 @@ def set_faults(state, kinds, servos, onsets, sizes):
     return state.replace(info=info)
 
 
-def make_runner(env, policy, steps=None, record_obs=False, random_faults=False, goal_idx=None):
+def make_runner(env, policy, steps=None, record_obs=False, random_faults=False, goal_idx=None, record_mocap=False):
     """Returns run(rng_keys, kinds, servos, onsets, sizes) -> dict of per-step arrays (B, T, ...).
     With random_faults=True the env's own fault sampling is kept and the fault args are ignored.
     goal_idx overrides the sampled goal (path index; the path is N_PATH points long)."""
@@ -80,8 +81,16 @@ def make_runner(env, policy, steps=None, record_obs=False, random_faults=False, 
                 "s": s2.info["s"], "remaining": rem, "cross_track": s2.metrics["cross_track"],
                 "done": done2, "fault_active": env.fault_active(s2.info),
             }
+            if "heading_err" in s2.metrics:
+                out["heading_err"] = s2.metrics["heading_err"]
+            if "struck" in s2.metrics:
+                out["struck"] = s2.metrics["struck"] > 0
+            if record_mocap:
+                out["mocap_pos"], out["mocap_quat"] = s2.data.mocap_pos, s2.data.mocap_quat
             if record_obs:
                 out["obs"] = obs_state
+                # what the robot itself knows whatever the policy's sensors: IMU and its last commands
+                out["diag_x"] = jp.concatenate([env._gravity(s2.data), s2.data.qvel[3:6], s2.info["last_act"]])
                 out["label"] = s.info["fault_kind"] * env.fault_active(s.info)
             return (s2, done2), out
 

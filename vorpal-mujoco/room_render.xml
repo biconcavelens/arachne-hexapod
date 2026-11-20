@@ -1,0 +1,219 @@
+<mujoco model="arachne_room_render">
+  <compiler angle="degree" meshdir="meshes" />
+  <option gravity="0 0 -9.81" timestep="0.002" integrator="implicitfast" />
+  <default>
+    <geom contype="1" conaffinity="0" friction="0.9 0.01 0.001" solref="0.004 1" />
+    <joint damping="0.02" armature="0.0005" />
+  </default>
+  <visual>
+    <global offwidth="1600" offheight="1200" />
+    <quality shadowsize="4096" />
+    <headlight ambient="0.35 0.35 0.35" diffuse="0.25 0.25 0.25" />
+    <map znear="0.005" zfar="30" />
+  </visual>
+  <asset>
+    <texture name="grid" type="2d" builtin="checker" rgb1=".18 .2 .24" rgb2=".24 .26 .3" width="512" height="512" />
+    <material name="grid" texture="grid" texrepeat="40 40" reflectance="0.1" />
+    <texture name="wood" type="2d" builtin="checker" rgb1="0.52 0.36 0.22" rgb2="0.46 0.31 0.19" width="512" height="512" mark="edge" markrgb="0.3 0.2 0.12" />
+    <material name="wood" texture="wood" texrepeat="40 8" reflectance="0.05" />
+    <material name="wallpaint" rgba="0.86 0.84 0.78 1" />
+  </asset>
+  <asset>
+    <mesh name="base_mesh" file="base.stl" scale="0.001 0.001 0.001" />
+    <mesh name="hinge_mesh" file="hinge.stl" scale="0.001 0.001 0.001" />
+    <mesh name="leg_mesh" file="leg10.stl" scale="0.001 0.001 0.001" />
+  </asset>
+  <worldbody>
+    <geom name="floor" type="plane" size="4.0 4.0 0.1" material="wood" contype="0" conaffinity="1" />
+    <body name="base" pos="0 0 0.098">
+      <freejoint name="root" />
+      <geom name="base_geom" type="mesh" mesh="base_mesh" rgba="0.3 0.35 0.8 1" mass="0.3" />
+      <body name="hip0" pos="0.057800 0.003294 -0.014508" euler="0 0 3.2617">
+        <joint name="hip0" type="hinge" axis="0 0 1" range="-90 90" />
+        <geom name="hingeA0" type="mesh" mesh="hinge_mesh" pos="0.161997 0.056852 0.091065" quat="-0.000000 0.000000 0.707107 0.707107" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <geom name="hingeB0" type="mesh" mesh="hinge_mesh" pos="-0.106790 -0.109657 -0.071521" quat="0.000000 1.000000 0.000000 0.000000" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <body name="knee0" pos="0.051638 -0.021254 -0.018331">
+          <joint name="knee0" type="hinge" axis="-0.000000 -1.000000 0.000000" range="-90 90" />
+          <geom name="leg0" type="mesh" mesh="leg_mesh" pos="0.051058 -0.024793 0.136487" quat="0.707107 0.000000 0.707107 0.000000" rgba="0.25 0.45 0.9 1" mass="0.025" />
+        </body>
+      </body>
+      <body name="hip1" pos="0.026047 0.051703 -0.014508" euler="0 0 63.2619">
+        <joint name="hip1" type="hinge" axis="0 0 1" range="-90 90" />
+        <geom name="hingeA1" type="mesh" mesh="hinge_mesh" pos="0.161997 0.056852 0.091065" quat="-0.000000 0.000000 0.707107 0.707107" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <geom name="hingeB1" type="mesh" mesh="hinge_mesh" pos="-0.106790 -0.109657 -0.071521" quat="0.000000 1.000000 0.000000 0.000000" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <body name="knee1" pos="0.051638 -0.021254 -0.018331">
+          <joint name="knee1" type="hinge" axis="-0.000000 -1.000000 0.000000" range="-90 90" />
+          <geom name="leg1" type="mesh" mesh="leg_mesh" pos="0.051058 -0.024793 0.136487" quat="0.707107 0.000000 0.707107 0.000000" rgba="0.25 0.45 0.9 1" mass="0.025" />
+        </body>
+      </body>
+      <body name="hip2" pos="-0.031753 0.048409 -0.014508" euler="0 0 123.2621">
+        <joint name="hip2" type="hinge" axis="0 0 1" range="-90 90" />
+        <geom name="hingeA2" type="mesh" mesh="hinge_mesh" pos="0.161997 0.056852 0.091065" quat="-0.000000 0.000000 0.707107 0.707107" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <geom name="hingeB2" type="mesh" mesh="hinge_mesh" pos="-0.106790 -0.109657 -0.071521" quat="0.000000 1.000000 0.000000 0.000000" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <body name="knee2" pos="0.051638 -0.021254 -0.018331">
+          <joint name="knee2" type="hinge" axis="-0.000000 -1.000000 0.000000" range="-90 90" />
+          <geom name="leg2" type="mesh" mesh="leg_mesh" pos="0.051058 -0.024793 0.136487" quat="0.707107 0.000000 0.707107 0.000000" rgba="0.25 0.45 0.9 1" mass="0.025" />
+        </body>
+      </body>
+      <body name="hip3" pos="-0.057800 -0.003294 -0.014508" euler="0 0 -176.7383">
+        <joint name="hip3" type="hinge" axis="0 0 1" range="-90 90" />
+        <geom name="hingeA3" type="mesh" mesh="hinge_mesh" pos="0.161997 0.056852 0.091065" quat="-0.000000 0.000000 0.707107 0.707107" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <geom name="hingeB3" type="mesh" mesh="hinge_mesh" pos="-0.106790 -0.109657 -0.071521" quat="0.000000 1.000000 0.000000 0.000000" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <body name="knee3" pos="0.051638 -0.021254 -0.018331">
+          <joint name="knee3" type="hinge" axis="-0.000000 -1.000000 0.000000" range="-90 90" />
+          <geom name="leg3" type="mesh" mesh="leg_mesh" pos="0.051058 -0.024793 0.136487" quat="0.707107 0.000000 0.707107 0.000000" rgba="0.25 0.45 0.9 1" mass="0.025" />
+        </body>
+      </body>
+      <body name="hip4" pos="-0.026047 -0.051703 -0.014508" euler="0 0 -116.7381">
+        <joint name="hip4" type="hinge" axis="0 0 1" range="-90 90" />
+        <geom name="hingeA4" type="mesh" mesh="hinge_mesh" pos="0.161997 0.056852 0.091065" quat="-0.000000 0.000000 0.707107 0.707107" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <geom name="hingeB4" type="mesh" mesh="hinge_mesh" pos="-0.106790 -0.109657 -0.071521" quat="0.000000 1.000000 0.000000 0.000000" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <body name="knee4" pos="0.051638 -0.021254 -0.018331">
+          <joint name="knee4" type="hinge" axis="-0.000000 -1.000000 0.000000" range="-90 90" />
+          <geom name="leg4" type="mesh" mesh="leg_mesh" pos="0.051058 -0.024793 0.136487" quat="0.707107 0.000000 0.707107 0.000000" rgba="0.25 0.45 0.9 1" mass="0.025" />
+        </body>
+      </body>
+      <body name="hip5" pos="0.031753 -0.048409 -0.014508" euler="0 0 -56.7379">
+        <joint name="hip5" type="hinge" axis="0 0 1" range="-90 90" />
+        <geom name="hingeA5" type="mesh" mesh="hinge_mesh" pos="0.161997 0.056852 0.091065" quat="-0.000000 0.000000 0.707107 0.707107" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <geom name="hingeB5" type="mesh" mesh="hinge_mesh" pos="-0.106790 -0.109657 -0.071521" quat="0.000000 1.000000 0.000000 0.000000" rgba="0.95 0.75 0.1 1" mass="0.006" />
+        <body name="knee5" pos="0.051638 -0.021254 -0.018331">
+          <joint name="knee5" type="hinge" axis="-0.000000 -1.000000 0.000000" range="-90 90" />
+          <geom name="leg5" type="mesh" mesh="leg_mesh" pos="0.051058 -0.024793 0.136487" quat="0.707107 0.000000 0.707107 0.000000" rgba="0.25 0.45 0.9 1" mass="0.025" />
+        </body>
+      </body>
+      <camera name="ego" pos="0.00897 0.00000 0.10219" xyaxes="0.00000 -1.00000 0.00000 0.34202 0.00000 0.93969" fovy="45.0" />
+    </body>
+    <light pos="-1.2 -1.2 2.4" dir="0 0 -1" diffuse="0.45 0.44 0.4" specular="0.05 0.05 0.05" castshadow="false" />
+    <light pos="1.2 1.2 2.4" dir="0 0 -1" diffuse="0.45 0.44 0.4" specular="0.05 0.05 0.05" castshadow="false" />
+    <light pos="-1.2 1.2 2.4" dir="0 0 -1" diffuse="0.45 0.44 0.4" specular="0.05 0.05 0.05" castshadow="false" />
+    <light pos="1.2 -1.2 2.4" dir="0 0 -1" diffuse="0.45 0.44 0.4" specular="0.05 0.05 0.05" castshadow="false" />
+    <light pos="0 0 3" dir="0 0 -1" diffuse="0.35 0.35 0.35" castshadow="true" />
+    <camera name="top" pos="0 0 7.0" xyaxes="1 0 0 0 1 0" fovy="48.0" />
+    <geom name="wall0" type="box" size="0.05 3.0 0.6" pos="3.0 0 0.6" rgba="0.82 0.8 0.74 1" contype="0" conaffinity="0" group="0" material="wallpaint" />
+    <geom name="wall1" type="box" size="0.05 3.0 0.6" pos="-3.0 0 0.6" rgba="0.82 0.8 0.74 1" contype="0" conaffinity="0" group="0" material="wallpaint" />
+    <geom name="wall2" type="box" size="3.0 0.05 0.6" pos="0 3.0 0.6" rgba="0.82 0.8 0.74 1" contype="0" conaffinity="0" group="0" material="wallpaint" />
+    <geom name="wall3" type="box" size="3.0 0.05 0.6" pos="0 -3.0 0.6" rgba="0.82 0.8 0.74 1" contype="0" conaffinity="0" group="0" material="wallpaint" />
+    <body name="table0" mocap="true" pos="50 0 -1">
+      <geom name="table0_0" type="box" size="0.5 0.35 0.015" pos="0 0 0.72" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+      <geom name="table0_1" type="capsule" size="0.02 0.35" pos="-0.45 -0.3 0.35" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+      <geom name="table0_2" type="capsule" size="0.02 0.35" pos="-0.45 0.3 0.35" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+      <geom name="table0_3" type="capsule" size="0.02 0.35" pos="0.45 -0.3 0.35" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+      <geom name="table0_4" type="capsule" size="0.02 0.35" pos="0.45 0.3 0.35" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="chair0" mocap="true" pos="51 0 -1">
+      <geom name="chair0_0" type="box" size="0.2 0.2 0.02" pos="0 0 0.45" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair0_1" type="box" size="0.02 0.2 0.2" pos="-0.19 0 0.67" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair0_2" type="capsule" size="0.012 0.22" pos="-0.17 -0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair0_3" type="capsule" size="0.012 0.22" pos="-0.17 0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair0_4" type="capsule" size="0.012 0.22" pos="0.17 -0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair0_5" type="capsule" size="0.012 0.22" pos="0.17 0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="chair1" mocap="true" pos="52 0 -1">
+      <geom name="chair1_0" type="box" size="0.2 0.2 0.02" pos="0 0 0.45" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair1_1" type="box" size="0.02 0.2 0.2" pos="-0.19 0 0.67" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair1_2" type="capsule" size="0.012 0.22" pos="-0.17 -0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair1_3" type="capsule" size="0.012 0.22" pos="-0.17 0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair1_4" type="capsule" size="0.012 0.22" pos="0.17 -0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="chair1_5" type="capsule" size="0.012 0.22" pos="0.17 0.17 0.22" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="sofa0" mocap="true" pos="53 0 -1">
+      <geom name="sofa0_0" type="box" size="0.9 0.4 0.2" pos="0 0 0.2" rgba="0.35 0.4 0.55 1" contype="0" conaffinity="0" group="0" />
+      <geom name="sofa0_1" type="box" size="0.9 0.1 0.25" pos="0 0.35 0.45" rgba="0.33 0.38 0.52 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="shelf0" mocap="true" pos="54 0 -1">
+      <geom name="shelf0_0" type="box" size="0.4 0.17 0.6" pos="0 0 0.6" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="shelf1" mocap="true" pos="55 0 -1">
+      <geom name="shelf1_0" type="box" size="0.4 0.17 0.6" pos="0 0 0.6" rgba="0.55 0.38 0.22 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="cardbox0" mocap="true" pos="56 0 -1">
+      <geom name="cardbox0_0" type="box" size="0.18 0.14 0.12" pos="0 0 0.12" rgba="0.7 0.55 0.35 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="cardbox1" mocap="true" pos="57 0 -1">
+      <geom name="cardbox1_0" type="box" size="0.18 0.14 0.12" pos="0 0 0.12" rgba="0.7 0.55 0.35 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="cardbox2" mocap="true" pos="58 0 -1">
+      <geom name="cardbox2_0" type="box" size="0.18 0.14 0.12" pos="0 0 0.12" rgba="0.7 0.55 0.35 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="bin0" mocap="true" pos="59 0 -1">
+      <geom name="bin0_0" type="capsule" size="0.12 0.12" pos="0 0 0.24" rgba="0.5 0.5 0.52 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="ball0" mocap="true" pos="60 0 -1">
+      <geom name="ball0_0" type="sphere" size="0.09" pos="0 0 0.09" rgba="0.85 0.25 0.2 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="ball1" mocap="true" pos="61 0 -1">
+      <geom name="ball1_0" type="sphere" size="0.09" pos="0 0 0.09" rgba="0.85 0.25 0.2 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="plant0" mocap="true" pos="62 0 -1">
+      <geom name="plant0_0" type="capsule" size="0.1 0.06" pos="0 0 0.16" rgba="0.6 0.35 0.25 1" contype="0" conaffinity="0" group="0" />
+      <geom name="plant0_1" type="sphere" size="0.22" pos="0 0 0.45" rgba="0.2 0.5 0.22 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="plant1" mocap="true" pos="63 0 -1">
+      <geom name="plant1_0" type="capsule" size="0.1 0.06" pos="0 0 0.16" rgba="0.6 0.35 0.25 1" contype="0" conaffinity="0" group="0" />
+      <geom name="plant1_1" type="sphere" size="0.22" pos="0 0 0.45" rgba="0.2 0.5 0.22 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="lamp0" mocap="true" pos="64 0 -1">
+      <geom name="lamp0_0" type="box" size="0.13 0.13 0.015" pos="0 0 0.015" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="lamp0_1" type="capsule" size="0.012 0.7" pos="0 0 0.72" rgba="0.25 0.2 0.17 1" contype="0" conaffinity="0" group="0" />
+      <geom name="lamp0_2" type="sphere" size="0.16" pos="0 0 1.45" rgba="0.85 0.85 0.82 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="book0" mocap="true" pos="65 0 -1">
+      <geom name="book0_0" type="box" size="0.1 0.07 0.012" pos="0 0 0.012" rgba="0.2 0.3 0.6 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="book1" mocap="true" pos="66 0 -1">
+      <geom name="book1_0" type="box" size="0.1 0.07 0.012" pos="0 0 0.012" rgba="0.2 0.3 0.6 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="shoe0" mocap="true" pos="67 0 -1">
+      <geom name="shoe0_0" type="box" size="0.13 0.05 0.04" pos="0 0 0.04" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="shoe1" mocap="true" pos="68 0 -1">
+      <geom name="shoe1_0" type="box" size="0.13 0.05 0.04" pos="0 0 0.04" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="rug0" mocap="true" pos="69 0 -1">
+      <geom name="rug0_0" type="box" size="0.6 0.4 0.003" pos="0 0 0.003" rgba="0.6 0.2 0.25 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="rug1" mocap="true" pos="70 0 -1">
+      <geom name="rug1_0" type="box" size="0.6 0.4 0.003" pos="0 0 0.003" rgba="0.6 0.2 0.25 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="cable0" mocap="true" pos="71 0 -1">
+      <geom name="cable0_0" type="capsule" size="0.004 0.45" pos="0 0 0.004" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="cable1" mocap="true" pos="72 0 -1">
+      <geom name="cable1_0" type="capsule" size="0.004 0.45" pos="0 0 0.004" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="vacuum" mocap="true" pos="80 0 -1">
+      <geom name="vacuum_0" type="ellipsoid" size="0.17 0.17 0.045" pos="0 0 0.045" rgba="0.15 0.15 0.17 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="ball_a" mocap="true" pos="81 0 -1">
+      <geom name="ball_a_0" type="sphere" size="0.08" pos="0 0 0.08" rgba="0.2 0.45 0.85 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="ball_b" mocap="true" pos="82 0 -1">
+      <geom name="ball_b_0" type="sphere" size="0.06" pos="0 0 0.06" rgba="0.95 0.75 0.15 1" contype="0" conaffinity="0" group="0" />
+    </body>
+    <body name="person" mocap="true" pos="83 0 -1">
+      <geom name="person_0" type="capsule" size="0.06 0.38" pos="0 0.1 0.44" rgba="0.2 0.22 0.3 1" contype="0" conaffinity="0" group="0" />
+      <geom name="person_1" type="capsule" size="0.06 0.38" pos="0 -0.1 0.44" rgba="0.2 0.22 0.3 1" contype="0" conaffinity="0" group="0" />
+      <geom name="person_2" type="box" size="0.13 0.05 0.04" pos="0.04 0.1 0.04" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0" group="0" />
+      <geom name="person_3" type="box" size="0.13 0.05 0.04" pos="0.04 -0.1 0.04" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0" group="0" />
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="hip0" joint="hip0" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="knee0" joint="knee0" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="hip1" joint="hip1" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="knee1" joint="knee1" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="hip2" joint="hip2" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="knee2" joint="knee2" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="hip3" joint="hip3" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="knee3" joint="knee3" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="hip4" joint="hip4" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="knee4" joint="knee4" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="hip5" joint="hip5" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+    <position name="knee5" joint="knee5" kp="2.0" kv="0.03" forcelimited="true" forcerange="-0.2 0.2" />
+  </actuator>
+  <keyframe>
+    <key name="stand" qpos="0 0 0.098 1 0 0 0 0 -0.523599 0 -0.523599 0 -0.523599 0 -0.523599 0 -0.523599 0 -0.523599" ctrl="0 -0.523599 0 -0.523599 0 -0.523599 0 -0.523599 0 -0.523599 0 -0.523599" />
+  </keyframe>
+  <statistic extent="4" center="0 0 0.3" />
+</mujoco>

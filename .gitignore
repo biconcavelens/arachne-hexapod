@@ -29,3 +29,7 @@ fault-sim/runs/
 fault-sim/hexapod_camera.xml
 fault-sim/hexapod_stage*.xml
 fault-sim/camera_view*.png
+# evaluation trajectories (regenerable)
+**/runs/**/traj_*.npz
+# lab machine outputs that stay there (MP4s and results go to the lab-results branch)
+vorpal-mujoco/rl/lab/run_all.log

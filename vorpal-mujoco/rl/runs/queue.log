@@ -1,0 +1,71 @@
+[2026-11-18 22:28:06] start: bash wslrun.sh python eval_room.py policies=room_both n=256 out=eval_room_both > runs_eval_room_both.out 2>&1
+[2026-11-18 22:39:45] exit 0: bash wslrun.sh python eval_room.py policies=room_both n=256 out=eval_room_both > runs_eval_room_both.out 2>&1
+[2026-11-18 22:39:45] start: bash wslrun.sh python speed_terrain.py 2048 > runs_speed_terrain.out 2>&1
+[2026-11-19 01:42:29] queue restarted after the 22:48 OOM (terrain reset compile fixed; jobs now in their own capped units)
+[2026-11-19 01:42:29] start (cap 7G): bash wslrun.sh python diagnose_room.py policy=room_both > runs_diag_room_both.out 2>&1
+[2026-11-19 01:54:15] exit 0: bash wslrun.sh python diagnose_room.py policy=room_both > runs_diag_room_both.out 2>&1
+[2026-11-19 01:54:15] start (cap 7G): bash wslrun.sh python train_fault.py name=room_cam env=room sensors=cam steps=40000000 envs=4096 > runs_room_cam.out 2>&1
+[2026-11-19 03:30:51] exit 0: bash wslrun.sh python train_fault.py name=room_cam env=room sensors=cam steps=40000000 envs=4096 > runs_room_cam.out 2>&1
+[2026-11-19 03:30:51] start (cap 7G): bash wslrun.sh python eval_room.py policies=room_cam n=256 out=eval_room_cam > runs_eval_room_cam.out 2>&1
+[2026-11-19 03:42:31] exit 0: bash wslrun.sh python eval_room.py policies=room_cam n=256 out=eval_room_cam > runs_eval_room_cam.out 2>&1
+[2026-11-19 03:42:31] start (cap 7G): bash wslrun.sh python train_fault.py name=room_imu env=room sensors=imu steps=40000000 envs=4096 > runs_room_imu.out 2>&1
+[2026-11-19 05:08:13] exit 0: bash wslrun.sh python train_fault.py name=room_imu env=room sensors=imu steps=40000000 envs=4096 > runs_room_imu.out 2>&1
+[2026-11-19 05:08:13] start (cap 7G): bash wslrun.sh python eval_room.py policies=room_imu n=256 out=eval_room_imu > runs_eval_room_imu.out 2>&1
+[2026-11-19 05:18:59] exit 0: bash wslrun.sh python eval_room.py policies=room_imu n=256 out=eval_room_imu > runs_eval_room_imu.out 2>&1
+[2026-11-19 05:18:59] start (cap 7G): bash wslrun.sh python train_fault.py name=room_both_healthy env=room sensors=both faults=0 steps=40000000 envs=4096 > runs_room_both_healthy.out 2>&1
+[2026-11-19 06:53:51] exit 0: bash wslrun.sh python train_fault.py name=room_both_healthy env=room sensors=both faults=0 steps=40000000 envs=4096 > runs_room_both_healthy.out 2>&1
+[2026-11-19 06:53:51] start (cap 7G): bash wslrun.sh python eval_room.py policies=room_both_healthy n=256 out=eval_room_both_healthy > runs_eval_room_both_healthy.out 2>&1
+[2026-11-19 07:05:20] exit 0: bash wslrun.sh python eval_room.py policies=room_both_healthy n=256 out=eval_room_both_healthy > runs_eval_room_both_healthy.out 2>&1
+[2026-11-19 07:05:20] start (cap 7G): bash wslrun.sh python train_fault.py name=dyn_both env=room_dyn sensors=both steps=40000000 envs=4096 > runs_dyn_both.out 2>&1
+[2026-11-19 08:43:22] exit 0: bash wslrun.sh python train_fault.py name=dyn_both env=room_dyn sensors=both steps=40000000 envs=4096 > runs_dyn_both.out 2>&1
+[2026-11-19 08:43:22] start (cap 7G): bash wslrun.sh python eval_room.py policies=dyn_both,room_both env=room_dyn n=256 out=eval_dyn_both > runs_eval_dyn_both.out 2>&1
+[2026-11-19 09:06:21] exit 0: bash wslrun.sh python eval_room.py policies=dyn_both,room_both env=room_dyn n=256 out=eval_dyn_both > runs_eval_dyn_both.out 2>&1
+[2026-11-19 09:06:21] start (cap 7G): bash wslrun.sh python train_fault.py name=dyn_imu env=room_dyn sensors=imu steps=40000000 envs=4096 > runs_dyn_imu.out 2>&1
+[2026-11-19 10:32:24] exit 0: bash wslrun.sh python train_fault.py name=dyn_imu env=room_dyn sensors=imu steps=40000000 envs=4096 > runs_dyn_imu.out 2>&1
+[2026-11-19 10:32:24] start (cap 7G): bash wslrun.sh python eval_room.py policies=dyn_imu env=room_dyn n=256 out=eval_dyn_imu > runs_eval_dyn_imu.out 2>&1
+[2026-11-19 10:43:39] exit 0: bash wslrun.sh python eval_room.py policies=dyn_imu env=room_dyn n=256 out=eval_dyn_imu > runs_eval_dyn_imu.out 2>&1
+[2026-11-19 10:43:39] start (cap 7G): bash wslrun.sh python diagnose_room.py policy=room_cam > runs_diag_room_cam.out 2>&1
+[2026-11-19 10:55:16] exit 0: bash wslrun.sh python diagnose_room.py policy=room_cam > runs_diag_room_cam.out 2>&1
+[2026-11-19 10:55:16] start (cap 7G): bash wslrun.sh python diagnose_room.py policy=room_imu > runs_diag_room_imu.out 2>&1
+[2026-11-19 11:05:25] exit 0: bash wslrun.sh python diagnose_room.py policy=room_imu > runs_diag_room_imu.out 2>&1
+[2026-11-19 11:05:25] start (cap 7G): bash wslrun.sh python train_fault.py name=terr_both env=terrain sensors=both steps=40000000 envs=4096 > runs_terr_both.out 2>&1
+[2026-11-19 13:30:33] exit 0: bash wslrun.sh python train_fault.py name=terr_both env=terrain sensors=both steps=40000000 envs=4096 > runs_terr_both.out 2>&1
+[2026-11-19 13:30:33] start (cap 7G): bash wslrun.sh python eval_room.py policies=terr_both,room_both env=terrain n=256 out=eval_terr_both > runs_eval_terr_both.out 2>&1
+[2026-11-19 14:03:32] exit 0: bash wslrun.sh python eval_room.py policies=terr_both,room_both env=terrain n=256 out=eval_terr_both > runs_eval_terr_both.out 2>&1
+[2026-11-19 14:03:32] start (cap 7G): bash wslrun.sh python eval_room.py policies=dyn_both,dyn_imu,room_both env=room_dyn n=256 out=eval_dyn_yield > runs_eval_dyn_yield.out 2>&1
+[2026-11-19 14:37:48] exit 0: bash wslrun.sh python eval_room.py policies=dyn_both,dyn_imu,room_both env=room_dyn n=256 out=eval_dyn_yield > runs_eval_dyn_yield.out 2>&1
+[2026-11-19 14:37:48] start (cap 7G): bash wslrun.sh python train_fault.py name=terr_imu env=terrain sensors=imu steps=40000000 envs=4096 > runs_terr_imu.out 2>&1
+[2026-11-19 16:11:33] exit 1: bash wslrun.sh python train_fault.py name=terr_imu env=terrain sensors=imu steps=40000000 envs=4096 > runs_terr_imu.out 2>&1
+[2026-11-19 16:11:34] start (cap 7G): bash wslrun.sh python eval_room.py policies=terr_imu env=terrain n=256 out=eval_terr_imu > runs_eval_terr_imu.out 2>&1
+[2026-11-19 16:27:53] exit 0: bash wslrun.sh python eval_room.py policies=terr_imu env=terrain n=256 out=eval_terr_imu > runs_eval_terr_imu.out 2>&1
+[2026-11-19 16:27:53] start (cap 7G): bash wslrun.sh python train_fault.py name=tdyn_both env=terrain_dyn sensors=both steps=40000000 envs=4096 > runs_tdyn_both.out 2>&1
+[2026-11-19 16:43:31] exit 1: bash wslrun.sh python train_fault.py name=tdyn_both env=terrain_dyn sensors=both steps=40000000 envs=4096 > runs_tdyn_both.out 2>&1
+[2026-11-19 16:43:31] start (cap 7G): bash wslrun.sh python eval_room.py policies=tdyn_both,terr_both,room_both env=terrain_dyn n=256 out=eval_tdyn_both > runs_eval_tdyn_both.out 2>&1
+[2026-11-19 17:05:06] exit 0: bash wslrun.sh python eval_room.py policies=tdyn_both,terr_both,room_both env=terrain_dyn n=256 out=eval_tdyn_both > runs_eval_tdyn_both.out 2>&1
+[2026-11-19 17:05:06] start (cap 7G): bash wslrun.sh python train_fault.py name=tdyn_imu env=terrain_dyn sensors=imu steps=40000000 envs=4096 > runs_tdyn_imu.out 2>&1
+[2026-11-19 18:02:05] queue paused by the user (interview); tdyn_imu stopped and put back at the front
+[2026-11-19 22:38:05] queue resumed
+[2026-11-19 22:38:06] start (cap 7G): bash wslrun.sh python train_fault.py name=tdyn_imu env=terrain_dyn sensors=imu steps=40000000 envs=4096 > runs_tdyn_imu.out 2>&1
+[2026-11-20 00:58:25] exit 0: bash wslrun.sh python train_fault.py name=tdyn_imu env=terrain_dyn sensors=imu steps=40000000 envs=4096 > runs_tdyn_imu.out 2>&1
+[2026-11-20 00:58:25] start (cap 7G): bash wslrun.sh python train_fault.py name=tdyn_both env=terrain_dyn sensors=both steps=40000000 envs=4096 > runs_tdyn_both.out 2>&1
+[2026-11-20 03:26:01] exit 0: bash wslrun.sh python train_fault.py name=tdyn_both env=terrain_dyn sensors=both steps=40000000 envs=4096 > runs_tdyn_both.out 2>&1
+[2026-11-20 03:26:01] start (cap 7G): bash wslrun.sh python eval_room.py policies=tdyn_both,terr_both,room_both env=terrain_dyn n=256 out=eval_tdyn_both > runs_eval_tdyn_both.out 2>&1
+[2026-11-20 04:15:49] exit 0: bash wslrun.sh python eval_room.py policies=tdyn_both,terr_both,room_both env=terrain_dyn n=256 out=eval_tdyn_both > runs_eval_tdyn_both.out 2>&1
+[2026-11-20 04:15:49] start (cap 7G): bash wslrun.sh python eval_room.py policies=tdyn_imu env=terrain_dyn n=256 out=eval_tdyn_imu > runs_eval_tdyn_imu.out 2>&1
+[2026-11-20 04:32:01] exit 0: bash wslrun.sh python eval_room.py policies=tdyn_imu env=terrain_dyn n=256 out=eval_tdyn_imu > runs_eval_tdyn_imu.out 2>&1
+[2026-11-20 04:32:01] start (cap 7G): bash wslrun.sh python diagnose_room.py policy=terr_both > runs_diag_terr_both.out 2>&1
+[2026-11-20 04:48:39] exit 0: bash wslrun.sh python diagnose_room.py policy=terr_both > runs_diag_terr_both.out 2>&1
+[2026-11-20 04:48:39] start (cap 7G): bash wslrun.sh python diagnose_room.py policy=tdyn_both > runs_diag_tdyn_both.out 2>&1
+[2026-11-20 05:05:33] exit 0: bash wslrun.sh python diagnose_room.py policy=tdyn_both > runs_diag_tdyn_both.out 2>&1
+[2026-11-20 05:05:33] start (cap 7G): bash wslrun.sh python train_fault.py name=dyn2_both env=room_dyn sensors=both steps=40000000 envs=4096 > runs_dyn2_both.out 2>&1
+[2026-11-20 06:44:15] exit 0: bash wslrun.sh python train_fault.py name=dyn2_both env=room_dyn sensors=both steps=40000000 envs=4096 > runs_dyn2_both.out 2>&1
+[2026-11-20 06:44:15] start (cap 7G): bash wslrun.sh python eval_room.py policies=dyn2_both,dyn_both,room_both env=room_dyn n=256 out=eval_dyn2_both > runs_eval_dyn2_both.out 2>&1
+[2026-11-20 07:18:49] exit 0: bash wslrun.sh python eval_room.py policies=dyn2_both,dyn_both,room_both env=room_dyn n=256 out=eval_dyn2_both > runs_eval_dyn2_both.out 2>&1
+[2026-11-20 07:18:49] start (cap 7G): bash wslrun.sh python train_fault.py name=dyn2_imu env=room_dyn sensors=imu steps=40000000 envs=4096 > runs_dyn2_imu.out 2>&1
+[2026-11-20 08:44:52] exit 0: bash wslrun.sh python train_fault.py name=dyn2_imu env=room_dyn sensors=imu steps=40000000 envs=4096 > runs_dyn2_imu.out 2>&1
+[2026-11-20 08:44:52] start (cap 7G): bash wslrun.sh python eval_room.py policies=dyn2_imu env=room_dyn n=256 out=eval_dyn2_imu > runs_eval_dyn2_imu.out 2>&1
+[2026-11-20 08:55:53] exit 0: bash wslrun.sh python eval_room.py policies=dyn2_imu env=room_dyn n=256 out=eval_dyn2_imu > runs_eval_dyn2_imu.out 2>&1
+[2026-11-20 08:55:53] start (cap 7G): bash wslrun.sh python train_fault.py name=terr_imu env=terrain sensors=imu steps=40000000 envs=4096 > runs_terr_imu.out 2>&1
+[2026-11-20 11:09:57] exit 0: bash wslrun.sh python train_fault.py name=terr_imu env=terrain sensors=imu steps=40000000 envs=4096 > runs_terr_imu.out 2>&1
+[2026-11-20 11:09:57] start (cap 7G): bash wslrun.sh python eval_room.py policies=terr_imu env=terrain n=256 out=eval_terr_imu > runs_eval_terr_imu.out 2>&1
+[2026-11-20 11:26:00] exit 0: bash wslrun.sh python eval_room.py policies=terr_imu env=terrain n=256 out=eval_terr_imu > runs_eval_terr_imu.out 2>&1

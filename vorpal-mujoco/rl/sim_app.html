@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arachne Path Demo</title>
+<style>
+/* Layout: overhead drawing board on the left, robot views and controls on the right. */
+:root {
+  --bg: #f3f4f6; --panel: #ffffff; --fg: #15181d; --fg2: #586070; --rule: #dcdfe5;
+  --accent: #2a78d6; --path: #1a8cff; --trail: #ff8c1a; --bad: #d8352b; --warn: #c98500; --ok: #1f9d55;
+  --sans: system-ui, "Segoe UI", sans-serif; --mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #111418; --panel: #1a1e24; --fg: #e8ebef; --fg2: #a0a8b5; --rule: #2d333c; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.45 var(--sans); }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; padding: 12px 18px; border-bottom: 1px solid var(--rule); background: var(--panel); }
+header h1 { font-size: 17px; margin: 0; font-weight: 600; }
+.chip { font: 12px var(--mono); color: var(--fg2); border: 1px solid var(--rule); border-radius: 4px; padding: 1px 6px; }
+#msg { color: var(--fg2); flex: 1 1 300px; }
+main { display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 420px); gap: 16px; padding: 16px 18px; justify-content: center; }
+@media (max-width: 1020px) { main { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 10px; display: grid; gap: 8px; min-width: 0; align-content: start; align-self: start; }
+.card h2 { margin: 0; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--fg2); }
+.board { position: relative; width: 100%; max-width: 100%; aspect-ratio: 1 / 1; }
+.board img, .board canvas { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 6px; }
+.board canvas { cursor: crosshair; touch-action: none; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: 500 13px var(--sans); padding: 7px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.on { background: var(--bad); border-color: var(--bad); color: #fff; }
+.views { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.views img { width: 100%; height: auto; border-radius: 6px; display: block; background: #000; }
+.ego { display: grid; grid-template-columns: 3fr 2fr; gap: 8px; align-items: start; }
+.cap { font-size: 12px; color: var(--fg2); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 6px; }
+.stat { border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; }
+.stat b { display: block; font: 600 17px var(--mono); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 11.5px; color: var(--fg2); }
+.kinds { display: flex; flex-wrap: wrap; gap: 6px; }
+.kinds button[aria-pressed="true"] { border-color: var(--fg); background: var(--fg); color: var(--panel); }
+svg text { font: 11px var(--sans); fill: var(--fg2); }
+.servo { cursor: pointer; stroke: var(--fg); stroke-width: 1.5; }
+.servo:hover { stroke-width: 3; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--fg2); }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Arachne path demo</h1>
+  <span class="chip" id="pol">policy</span>
+  <span id="msg">Loading…</span>
+</header>
+<main>
+  <section class="card">
+    <h2>Overhead camera: draw the path</h2>
+    <div class="board">
+      <img id="top" alt="Overhead view of the room with the robot">
+      <canvas id="draw" width="560" height="560" aria-label="Draw the path here"></canvas>
+    </div>
+    <div class="row">
+      <button id="go" class="primary">Go</button>
+      <button id="pause">Pause</button>
+      <button id="clear">Clear path</button>
+      <button id="new">New room</button>
+      <button id="rec">Record GIF</button>
+    </div>
+    <div class="cap">Press on the robot and drag to draw. The path is used only to steer; the overhead camera is not an input to the policy.</div>
+  </section>
+
+  <section class="card">
+    <h2>Robot</h2>
+    <div class="views">
+      <img id="chase" alt="Camera following the robot">
+      <div class="ego">
+        <div><img id="ego" alt="The robot's body camera"><div class="cap">Body camera</div></div>
+        <div><img id="pcam" alt="What the policy sees, 24 by 16"><div class="cap" id="pcamcap">Policy input, 24 × 16</div></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="s_t">0.0</b><span>time (s)</span></div>
+      <div class="stat"><b id="s_rem">–</b><span>to goal (cm)</span></div>
+      <div class="stat"><b id="s_off">–</b><span>off path (mm)</span></div>
+      <div class="stat"><b id="s_v">0.0</b><span>speed (cm/s)</span></div>
+      <div class="stat"><b id="s_tilt">0</b><span>tilt (°)</span></div>
+    </div>
+    <h2>Break a servo</h2>
+    <div class="kinds" role="group" aria-label="Fault type">
+      <button data-k="dead" aria-pressed="true">Dead</button>
+      <button data-k="stuck" aria-pressed="false">Stuck</button>
+      <button data-k="signal" aria-pressed="false">Signal loss</button>
+      <button data-k="worn" aria-pressed="false">Worn gears</button>
+      <button data-k="repair" aria-pressed="false">Repair</button>
+    </div>
+    <svg id="legs" viewBox="0 0 300 250" role="img" aria-label="Hexapod servos seen from above, front at the top"></svg>
+    <div class="legend">
+      <span><span class="sw" style="background:#4f9d69"></span>working</span>
+      <span><span class="sw" style="background:#d8352b"></span>dead</span>
+      <span><span class="sw" style="background:#7a3fb8"></span>stuck</span>
+      <span><span class="sw" style="background:#e3a21a"></span>signal loss</span>
+      <span><span class="sw" style="background:#2a78d6"></span>worn gears</span>
+    </div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const post = (p, b = {}) => fetch(p, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(b)});
+const COL = {dead: "#d8352b", stuck: "#7a3fb8", signal: "#e3a21a", worn: "#2a78d6"};
+const LEGS = ["front", "front-left", "rear-left", "rear", "rear-right", "front-right"];
+let kind = "dead", faults = {};
+
+// live images: each reloads as soon as the previous one arrived
+function stream(id, name, ms) {
+  const img = $(id);
+  const next = () => setTimeout(() => { img.src = `/img/${name}?t=${Date.now()}`; }, ms);
+  img.onload = next; img.onerror = () => setTimeout(next, 500);
+  next();
+}
+stream("top", "top", 120); stream("chase", "chase", 90); stream("ego", "ego", 120); stream("pcam", "policycam", 120);
+
+// drawing
+const cv = $("draw"), ctx = cv.getContext("2d");
+let pts = [], drawing = false;
+function pos(e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; }
+function redraw() {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  if (pts.length < 2) return;
+  ctx.strokeStyle = "rgba(26,140,255,.9)"; ctx.lineWidth = 3; ctx.lineJoin = ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(...pts[0]); for (const p of pts.slice(1)) ctx.lineTo(...p); ctx.stroke();
+}
+cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); drawing = true; pts = [pos(e)]; redraw(); });
+cv.addEventListener("pointermove", e => { if (!drawing) return; const p = pos(e), q = pts[pts.length - 1];
+  if (Math.hypot(p[0] - q[0], p[1] - q[1]) > 3) { pts.push(p); redraw(); } });
+cv.addEventListener("pointerup", () => { if (!drawing) return; drawing = false;
+  if (pts.length > 1) post("/path", {points: pts}); setTimeout(() => { pts = []; redraw(); }, 400); });
+
+$("go").onclick = () => post("/go");
+$("pause").onclick = () => post("/pause");
+$("clear").onclick = () => { pts = []; redraw(); post("/pause"); };
+$("new").onclick = () => post("/new", {});
+$("rec").onclick = () => post("/record");
+document.querySelectorAll(".kinds button").forEach(b => b.onclick = () => {
+  kind = b.dataset.k; document.querySelectorAll(".kinds button").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
+
+// servo diagram: robot frame, front up; leg k sits at 60k degrees counter-clockwise from the front
+const svg = $("legs"), NS = "http://www.w3.org/2000/svg";
+function el(t, a) { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; }
+el("polygon", {points: [...Array(6)].map((_, k) => { const a = Math.PI / 3 * k; return `${150 - 34 * Math.sin(a)},${125 - 34 * Math.cos(a)}`; }).join(" "),
+  fill: "none", stroke: "currentColor", "stroke-width": 1.5, opacity: .5});
+el("text", {x: 150, y: 14, "text-anchor": "middle"}).textContent = "front";
+const dots = [];
+for (let k = 0; k < 6; k++) {
+  const a = Math.PI / 3 * k, s = Math.sin(a), c = Math.cos(a);
+  const at = r => [150 - r * s, 125 - r * c];
+  el("line", {x1: at(34)[0], y1: at(34)[1], x2: at(100)[0], y2: at(100)[1], stroke: "currentColor", "stroke-width": 2, opacity: .35});
+  for (const [j, r, nm] of [[0, 56, "hip"], [1, 90, "knee"]]) {
+    const [x, y] = at(r), servo = 2 * k + j;
+    const d = el("circle", {cx: x, cy: y, r: 11, class: "servo", tabindex: 0, role: "button",
+      "aria-label": `${LEGS[k]} ${nm}`});
+    const tt = document.createElementNS(NS, "title"); tt.textContent = `${LEGS[k]} ${nm}`; d.appendChild(tt);
+    d.onclick = () => post("/fault", {servo, kind});
+    d.onkeydown = e => { if (e.key === "Enter" || e.key === " ") post("/fault", {servo, kind}); };
+    dots[servo] = d;
+  }
+  const [lx, ly] = at(116); el("text", {x: lx, y: ly + 4, "text-anchor": "middle"}).textContent = LEGS[k];
+}
+
+async function poll() {
+  try {
+    const s = await (await fetch("/state")).json();
+    $("msg").textContent = s.msg || ""; $("pol").textContent = `${s.policy} · ${s.sensors}`;
+    $("s_t").textContent = s.t.toFixed(1);
+    $("s_rem").textContent = s.remaining_cm == null ? "–" : s.remaining_cm.toFixed(0);
+    $("s_off").textContent = s.off_path_mm == null ? "–" : s.off_path_mm;
+    $("s_v").textContent = s.speed_cms.toFixed(1); $("s_tilt").textContent = s.tilt_deg.toFixed(0);
+    $("rec").textContent = s.recording ? "Stop & save GIF" : "Record GIF"; $("rec").className = s.recording ? "on" : "";
+    $("pcam").parentElement.hidden = s.sensors === "imu";
+    faults = s.faults || {};
+    dots.forEach((d, i) => d.setAttribute("fill", COL[faults[i]] || "#4f9d69"));
+  } catch (e) {}
+  setTimeout(poll, 250);
+}
+poll();
+</script>
+</body>
+</html>

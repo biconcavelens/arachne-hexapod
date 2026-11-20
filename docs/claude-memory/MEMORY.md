@@ -8,3 +8,6 @@
 - [Ubuntu machine](user-machine-ubuntu.md) — native Ubuntu 26.04 since the 2026-11 reinstall; no Windows/WSL; uv, adb, kaggle not yet installed
 - [Kaggle pipeline](reference-kaggle-pipeline.md) — dataset + kernel names, kaggle_push.sh, STAMP check, piecewise downloads
 - [Long jobs via systemd-run](feedback-long-jobs-systemd.md) — nohup jobs die with the app; OOM at 14 GB killed everything 2026-11-18
+- [Four-stage results v2](project-stage-results-v2.md) — laptop results 2026-11-18..20 (24x16, no heading reward): numbers, lessons, report link
+- [Lab run v3](project-lab-run-v3.md) — 2026-11-20 rerun on lab RTX 6000 Ada: heading reward, 96x64 CNN camera, LAB_RUN.md, branch lab-results
+- [Code map](reference-code-map.md) — where envs/training/eval/diagnosis/videos/sim app/queue live in vorpal-mujoco/rl and how to run them

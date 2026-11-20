@@ -1,0 +1,21 @@
+{
+ "policy": "room_both",
+ "scene": "room",
+ "sensors": "both",
+ "episodes": 1536,
+ "heldout": 308,
+ "detect_auroc": 0.6989681350745006,
+ "right_servo_pct": 19.421203438395416,
+ "all_found_1_pct": 19.421203438395416,
+ "all_found_2_pct": 4.355566104913364,
+ "all_found_3_pct": 1.0558488469019172,
+ "right_servo_by_kind": {
+  "dead": 20.576784426820478,
+  "stuck": 21.685631119343743,
+  "signal loss": 12.790005948839978,
+  "worn gears": 8.463949843260188
+ },
+ "false_alarms_per_min": 0.2567284241153566,
+ "detected_pct": 31.03448275862069,
+ "median_delay_s": 7.2
+}

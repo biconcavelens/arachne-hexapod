@@ -1,0 +1,21 @@
+{
+ "policy": "room_imu",
+ "scene": "room",
+ "sensors": "imu",
+ "episodes": 1536,
+ "heldout": 308,
+ "detect_auroc": 0.8488483455726037,
+ "right_servo_pct": 56.32091690544413,
+ "all_found_1_pct": 56.32091690544413,
+ "all_found_2_pct": 15.149537146926182,
+ "all_found_3_pct": 6.835232008891359,
+ "right_servo_by_kind": {
+  "dead": 60.34607065609229,
+  "stuck": 62.75469700979095,
+  "signal loss": 28.73289708506841,
+  "worn gears": 32.68025078369906
+ },
+ "false_alarms_per_min": 0.17970989688074965,
+ "detected_pct": 85.44061302681992,
+ "median_delay_s": 3.4000000000000004
+}

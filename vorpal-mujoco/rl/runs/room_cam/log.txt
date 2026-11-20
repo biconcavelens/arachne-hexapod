@@ -1,0 +1,26 @@
+[    82s] step           0  reward   -0.43  len  425  path   3.6 cm(avg)  xtrack  48.3 mm  at_goal   0.0%  faulty   68%  SUCCESS   0.0%  bumped  0.8%
+[   351s] step   1,720,320  reward    1.96  len  497  path   8.2 cm(avg)  xtrack  43.8 mm  at_goal   0.0%  faulty   69%  SUCCESS   0.0%  bumped  0.0%
+[   610s] step   3,440,640  reward   15.25  len  584  path  25.2 cm(avg)  xtrack  29.3 mm  at_goal   0.0%  faulty   64%  SUCCESS   0.0%  bumped  0.0%
+[   846s] step   5,160,960  reward   24.17  len  594  path  44.1 cm(avg)  xtrack  24.3 mm  at_goal   0.0%  faulty   73%  SUCCESS   0.0%  bumped  0.0%
+[  1081s] step   6,881,280  reward   29.00  len  596  path  59.8 cm(avg)  xtrack  22.0 mm  at_goal   0.7%  faulty   79%  SUCCESS   8.6%  bumped  0.0%
+[  1317s] step   8,601,600  reward   32.13  len  595  path  61.6 cm(avg)  xtrack  20.4 mm  at_goal   2.8%  faulty   79%  SUCCESS  22.7%  bumped  0.0%
+[  1552s] step  10,321,920  reward   39.33  len  600  path  68.8 cm(avg)  xtrack  17.2 mm  at_goal   8.8%  faulty   67%  SUCCESS  46.9%  bumped  0.0%
+[  1788s] step  12,042,240  reward   48.23  len  598  path  78.3 cm(avg)  xtrack  16.5 mm  at_goal  19.3%  faulty   73%  SUCCESS  64.1%  bumped  0.0%
+[  2023s] step  13,762,560  reward   47.04  len  599  path  75.0 cm(avg)  xtrack  15.4 mm  at_goal  16.0%  faulty   73%  SUCCESS  60.2%  bumped  0.0%
+[  2258s] step  15,482,880  reward   49.28  len  599  path  76.0 cm(avg)  xtrack  15.0 mm  at_goal  18.5%  faulty   74%  SUCCESS  61.7%  bumped  0.0%
+[  2494s] step  17,203,200  reward   54.93  len  600  path  86.4 cm(avg)  xtrack  14.4 mm  at_goal  26.4%  faulty   73%  SUCCESS  74.2%  bumped  0.0%
+[  2730s] step  18,923,520  reward   57.10  len  600  path  84.1 cm(avg)  xtrack  13.1 mm  at_goal  26.3%  faulty   69%  SUCCESS  74.2%  bumped  0.0%
+[  2965s] step  20,643,840  reward   52.38  len  600  path  80.2 cm(avg)  xtrack  13.5 mm  at_goal  18.8%  faulty   72%  SUCCESS  68.8%  bumped  0.0%
+[  3201s] step  22,364,160  reward   53.05  len  597  path  78.4 cm(avg)  xtrack  13.0 mm  at_goal  20.3%  faulty   66%  SUCCESS  68.8%  bumped  0.0%
+[  3437s] step  24,084,480  reward   59.24  len  600  path  88.6 cm(avg)  xtrack  12.9 mm  at_goal  28.9%  faulty   73%  SUCCESS  80.5%  bumped  0.0%
+[  3672s] step  25,804,800  reward   53.78  len  600  path  80.2 cm(avg)  xtrack  13.0 mm  at_goal  19.9%  faulty   72%  SUCCESS  74.2%  bumped  0.0%
+[  3907s] step  27,525,120  reward   50.42  len  599  path  74.6 cm(avg)  xtrack  13.3 mm  at_goal  16.0%  faulty   73%  SUCCESS  59.4%  bumped  0.0%
+[  4143s] step  29,245,440  reward   60.32  len  599  path  88.8 cm(avg)  xtrack  12.3 mm  at_goal  28.3%  faulty   75%  SUCCESS  79.7%  bumped  0.0%
+[  4378s] step  30,965,760  reward   60.13  len  599  path  87.0 cm(avg)  xtrack  11.9 mm  at_goal  26.8%  faulty   70%  SUCCESS  81.2%  bumped  0.0%
+[  4613s] step  32,686,080  reward   47.65  len  600  path  68.6 cm(avg)  xtrack  13.5 mm  at_goal  12.9%  faulty   71%  SUCCESS  55.5%  bumped  0.0%
+[  4848s] step  34,406,400  reward   64.48  len  600  path  91.6 cm(avg)  xtrack  12.2 mm  at_goal  35.3%  faulty   72%  SUCCESS  85.2%  bumped  0.0%
+[  5083s] step  36,126,720  reward   62.29  len  600  path  91.0 cm(avg)  xtrack  11.3 mm  at_goal  28.3%  faulty   68%  SUCCESS  80.5%  bumped  0.0%
+[  5319s] step  37,847,040  reward   50.34  len  600  path  71.6 cm(avg)  xtrack  12.6 mm  at_goal  13.6%  faulty   73%  SUCCESS  54.7%  bumped  0.0%
+[  5554s] step  39,567,360  reward   65.61  len  600  path  94.1 cm(avg)  xtrack  11.6 mm  at_goal  34.6%  faulty   72%  SUCCESS  86.7%  bumped  0.0%
+[  5789s] step  41,287,680  reward   59.70  len  598  path  85.1 cm(avg)  xtrack  12.0 mm  at_goal  27.4%  faulty   73%  SUCCESS  81.2%  bumped  0.0%
+done in 5790s

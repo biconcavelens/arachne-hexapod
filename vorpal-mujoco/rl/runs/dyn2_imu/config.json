@@ -1,0 +1,87 @@
+{
+ "env": "room_dyn",
+ "faults": true,
+ "steps": 40000000,
+ "envs": 4096,
+ "policy_layers": [
+  512,
+  256,
+  128
+ ],
+ "value_layers": [
+  512,
+  256,
+  256
+ ],
+ "config": {
+  "ctrl_dt": 0.05,
+  "episode_length": 600,
+  "fault_config": {
+   "deadband_deg": [
+    5.0,
+    20.0
+   ],
+   "loss_p": [
+    0.3,
+    0.9
+   ],
+   "onset_max": 400,
+   "p_count": [
+    0.15,
+    0.3,
+    0.3,
+    0.25
+   ],
+   "p_from_start": 0.3,
+   "p_kind": [
+    0.35,
+    0.35,
+    0.15,
+    0.15
+   ]
+  },
+  "impl": "jax",
+  "max_cross_track": 0.15,
+  "mover_config": {
+   "cross_from": 0.25,
+   "cross_to": 0.85,
+   "early_late_s": 3.0,
+   "p_mover": 0.6,
+   "v_nominal": 0.1
+  },
+  "noise": 0.0,
+  "path_config": {
+   "goal_max": 1.9,
+   "goal_min": 1.0,
+   "kappa_max": 3.0,
+   "p_straight": 0.4
+  },
+  "reward_config": {
+   "air_time_min": 0.15,
+   "scales": {
+    "action_rate": -0.02,
+    "ang_vel_xy": -0.02,
+    "at_goal": 2.0,
+    "cross_track": 2.0,
+    "energy": -0.01,
+    "feet_air_time": 0.5,
+    "feet_slip": -0.5,
+    "orientation": -2.0,
+    "progress": 1.5,
+    "yaw_rate": -0.05
+   },
+   "sigma_track": 0.02,
+   "slow_frac": 0.5,
+   "termination": -5.0
+  },
+  "room_config": {
+   "candidates": 16,
+   "clearance": 0.2,
+   "p_cross": 0.5,
+   "p_present": 0.75
+  },
+  "sensors": "imu",
+  "sim_dt": 0.002,
+  "v_des": 0.12
+ }
+}
