@@ -36,3 +36,6 @@ For simplicity, JAX has removed its internal frames from the traceback of the fo
 NVIDIA RTX A400, 4094 MiB
 [2026-11-20 16:19:32] start preflight
 [2026-11-20 16:27:02] end preflight: exit 0 after 7 min
+preflight: 5,843 training steps/s with the camera -> about 15 h for the 8 camera trainings (+ roughly 3 h for IMU-only trainings, evaluations and videos)
+[2026-11-20 16:27:08] start train_room_imu
+[2026-11-20 16:59:20] end train_room_imu: exit 0 after 32 min
