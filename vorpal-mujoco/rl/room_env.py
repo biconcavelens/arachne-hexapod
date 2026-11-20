@@ -395,7 +395,9 @@ class FaultRoom(mjx_env.MjxEnv):
         "progress": progress * moving,
         "cross_track": jp.exp(-jp.square(d / rc.sigma_track)),
         "at_goal": at_goal.astype(jp.float32),
-        "heading": jp.exp(-jp.square(head_err / rc.sigma_heading)),
+        # sharp peak (sigma) for facing the path exactly, plus a broad cosine term so a robot that starts
+        # 90 deg off still gets a signal telling it which way to turn (the Gaussian alone is ~0 beyond 50 deg)
+        "heading": 0.5 * jp.exp(-jp.square(head_err / rc.sigma_heading)) + 0.25 * (1 + jp.cos(head_err)),
         "orientation": jp.sum(jp.square(grav[:2])),
         "ang_vel_xy": jp.sum(jp.square(gyro[:2])),
         "yaw_rate": jp.square(gyro[2]),

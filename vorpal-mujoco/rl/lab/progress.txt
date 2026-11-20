@@ -1,0 +1,6 @@
+[2026-11-20] Code changes on the lab machine before the run (by Claude Code, committed on lab-results):
+  - room_env.py: heading reward = 0.5*exp(-(e/0.35)^2) + 0.25*(1+cos e). The Gaussian alone is ~0 beyond
+    50 deg, so robots starting up to 90 deg off got no signal to turn toward the path.
+  - train_fault.py: the training log prints the mean heading error; snapshots kept at ~25/50/75% in runs/<name>/ckpt/.
+  - lab/push_results.sh: adds each file pattern separately (one unmatched pattern made git add skip everything).
+  - Camera 120x80 (user's choice), CUDA_VISIBLE_DEVICES pinned to the RTX 6000 Ada (the machine also has an A400).

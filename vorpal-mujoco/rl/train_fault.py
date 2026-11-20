@@ -72,14 +72,24 @@ def progress(step, m):
     log(f"[{time.time()-t0:6.0f}s] step {step:>11,}  reward {m['eval/episode_reward']:7.2f}  len {n:4.0f}"
         f"  path {m.get('eval/episode_progress', float('nan'))/max(n,1)*100:5.1f} cm(avg)"
         f"  xtrack {m.get('eval/episode_cross_track', float('nan'))/max(n,1)*1000:5.1f} mm"
+        f"  heading {np.degrees(m.get('eval/episode_heading_err', float('nan'))/max(n,1)):5.1f} deg"
         f"  at_goal {m.get('eval/episode_at_goal', float('nan'))/L*100:5.1f}%"
         f"  faulty {m.get('eval/episode_faulty', float('nan'))/max(n,1)*100:4.0f}%"
         + (f"  SUCCESS {m['eval/episode_success']*100:5.1f}%  bumped {m['eval/episode_bumped']*100:4.1f}%"
            if "eval/episode_success" in m else ""))
 
 
+CKPT_AT = [STEPS // 4, STEPS // 2, 3 * STEPS // 4]   # keep snapshots near 25/50/75% (params.pkl is the latest)
+
+
 def save(step, make_policy, params):
-    pickle.dump(jax.tree_util.tree_map(np.asarray, params), open(os.path.join(out, "params.pkl"), "wb"))
+    p = jax.tree_util.tree_map(np.asarray, params)
+    pickle.dump(p, open(os.path.join(out, "params.pkl"), "wb"))
+    if CKPT_AT and step >= CKPT_AT[0]:
+        while CKPT_AT and step >= CKPT_AT[0]:
+            CKPT_AT.pop(0)
+        os.makedirs(os.path.join(out, "ckpt"), exist_ok=True)
+        pickle.dump(p, open(os.path.join(out, "ckpt", f"params_{step:011d}.pkl"), "wb"))
 
 
 networks = policy_nets.factory(ENCODER, CAM, POLICY_LAYERS, VALUE_LAYERS)
