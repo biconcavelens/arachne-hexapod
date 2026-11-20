@@ -9,7 +9,7 @@
  ],
  "faults": true,
  "steps": 2000000,
- "envs": 4096,
+ "envs": 3072,
  "policy_layers": [
   512,
   256,

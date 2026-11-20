@@ -28,3 +28,11 @@ EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.9
 EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
 --------------------
 For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+[2026-11-20 16:10:53] PREFLIGHT FAILED at 120x80 - see lab/logs/preflight.out. If it ran out of GPU memory, rerun with ARACHNE_CAM=72x48.
+[2026-11-20] Preflight at 120x80 with 4096 envs ran out of GPU memory in the PPO update (the rollout buffer is
+  envs x 20 steps x 29,360 obs floats = 9 GiB at 4096, and the update holds ~5 copies). Test at 3072 envs: peak
+  35.9 GB of 48 GB, ~4,900 steps/s. Rerun with ARACHNE_CAM=120x80 ENVS=3072 (PPO batch_size = envs/32 = 96).
+[2026-11-20 16:19:32] run_all: camera 120x80, 3072 envs, 40000000 steps, GPU: NVIDIA RTX 6000 Ada Generation, 49140 MiB
+NVIDIA RTX A400, 4094 MiB
+[2026-11-20 16:19:32] start preflight
+[2026-11-20 16:27:02] end preflight: exit 0 after 7 min

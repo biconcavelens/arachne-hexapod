@@ -1,37 +1,7 @@
-W1120 16:09:00.179001  356551 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems.
 compile 14s
-terrain_dyn both: 10,690 env-steps/s at 4096 envs done 0.002197265625
-run v3_preflight: faults=True steps=2,000,000 envs=4096 obs {'privileged_state': (172,), 'state': (29360,)}
-[    80s] step           0  reward    4.42  len  316  path   6.7 cm(avg)  xtrack  55.4 mm  heading  51.8 deg  at_goal   0.0%  faulty   74%  SUCCESS   0.0%  bumped  4.7%
-W1120 16:10:45.892762  358568 bfc_allocator.cc:371] Allocator (GPU_0_bfc) ran out of memory trying to allocate 8.98GiB from the lower end with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-W1120 16:10:45.892832  358568 bfc_allocator.cc:371] Allocator (GPU_0_bfc) ran out of memory trying to allocate 8.98GiB from the lower end with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-E1120 16:10:47.012108  358399 config_assigner.cc:536] Could not get config for HLO: %wrapped_transpose.52 = f32[4096,20,29360]{2,1,0} fusion(%while.1767.0), kind=kLoop, calls=
-(param_0.18656: f32[20,4096,29360]) -> f32[4096,20,29360] {
-  %param_0.18656 = f32[20,4096,29360]{2,1,0} parameter(0)
-  ROOT %transpose.1613.1 = f32[4096,20,29360]{2,1,0} transpose(%param_0.18656), dimensions={1,0,2}, metadata={op_name="jit(_fun)/while/body/eval_jaxpr/while" stack_frame_id=3321}
-}, metadata={op_name="jit(_fun)/while/body/eval_jaxpr/while" stack_frame_id=3321}. Status: NOT_FOUND: All configs failed during profiling or were excluded from selection.
-Failures (2):
-EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
-EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
-=== Source Location Trace: ===
-external/xla+/xla/backends/autotuner/config_selector.cc:71
-external/xla+/xla/backends/autotuner/autotuner.cc:242
-
-Traceback (most recent call last):
-  File "/home/kavinder/trishanth-hexapod/vorpal-mujoco/rl/train_fault.py", line 96, in <module>
-    make_policy, params, _ = ppo.train(
-                             ^^^^^^^^^^
-  File "/home/kavinder/rl/lib/python3.12/site-packages/brax/training/agents/ppo/train.py", line 814, in train
-    training_epoch_with_timing(training_state, env_state, epoch_keys)
-  File "/home/kavinder/rl/lib/python3.12/site-packages/brax/training/agents/ppo/train.py", line 685, in training_epoch_with_timing
-    result = training_epoch(training_state, env_state, key)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kavinder/rl/lib/python3.12/site-packages/jax/_src/pmap.py", line 319, in wrapped
-    out = jitted_f(*dyn_args_flat)
-          ^^^^^^^^^^^^^^^^^^^^^^^^
-jax.errors.JaxRuntimeError: NOT_FOUND: All configs failed during profiling or were excluded from selection.
-Failures (2):
-EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
-EXECUTION FAILED: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.98GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error='']
---------------------
-For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+terrain_dyn both: 10,369 env-steps/s at 3072 envs done 0.0026041667442768812
+run v3_preflight: faults=True steps=2,000,000 envs=3072 obs {'privileged_state': (172,), 'state': (29360,)}
+[    80s] step           0  reward    3.79  len  302  path   6.0 cm(avg)  xtrack  54.7 mm  heading  53.3 deg  at_goal   0.0%  faulty   71%  SUCCESS   0.0%  bumped  4.7%
+W1120 16:21:20.966892  401402 cuda_timer.cc:88] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems.
+[   427s] step   2,027,520  reward   11.30  len  424  path  12.6 cm(avg)  xtrack  48.6 mm  heading  45.7 deg  at_goal   0.0%  faulty   70%  SUCCESS   0.0%  bumped  4.7%
+done in 427s
