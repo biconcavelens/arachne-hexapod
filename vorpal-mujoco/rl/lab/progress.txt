@@ -45,3 +45,5 @@ preflight: 5,843 training steps/s with the camera -> about 15 h for the 8 camera
 [2026-11-20 19:57:25] end train_room_cam: exit 0 after 88 min
 [2026-11-20 19:57:31] start train_dyn_imu
 [2026-11-20 20:29:58] end train_dyn_imu: exit 0 after 32 min
+[2026-11-20 20:30:04] start train_dyn_both
+[2026-11-20 22:03:24] end train_dyn_both: exit 0 after 93 min
